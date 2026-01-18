@@ -343,6 +343,142 @@
             margin-top: 10px;
         }
 
+        .scenario-card .scenario-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .scenario-card svg {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        /* Typewriter effect */
+        .typewriter {
+            overflow: hidden;
+        }
+
+        .typewriter .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.1em;
+            background: #ffd700;
+            margin-left: 2px;
+            animation: blink 0.7s infinite;
+            vertical-align: text-bottom;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* Choice cards with icons */
+        .choice-btn {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .choice-btn .choice-icon {
+            font-size: 1.8em;
+            min-width: 40px;
+            text-align: center;
+            opacity: 0.9;
+        }
+
+        .choice-btn .choice-content {
+            flex: 1;
+        }
+
+        .choice-btn .choice-content .choice-label {
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 3px;
+            display: block;
+            font-size: 1.05em;
+        }
+
+        .choice-btn .choice-content .choice-desc {
+            color: #aaa;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        /* Consequence animations */
+        @keyframes pulsePositive {
+            0% { box-shadow: 0 0 0 0 rgba(0, 179, 71, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(0, 179, 71, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 179, 71, 0); }
+        }
+
+        @keyframes pulseNegative {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        @keyframes pulseNeutral {
+            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 215, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+        }
+
+        .consequence-box.positive {
+            animation: pulsePositive 0.8s ease-out;
+        }
+
+        .consequence-box.negative {
+            animation: pulseNegative 0.5s ease-out;
+        }
+
+        .consequence-box.neutral {
+            animation: pulseNeutral 0.8s ease-out;
+        }
+
+        .consequence-box .consequence-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        /* Score animation */
+        @keyframes scorePopIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .score-number {
+            animation: scorePopIn 0.6s ease-out;
+        }
+
+        /* Scenario grid improvements */
+        .scenario-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .scenario-card {
+            text-align: center;
+            padding: 20px 15px;
+        }
+
+        .scenario-card h3 {
+            font-size: 1.1em;
+            margin-bottom: 8px;
+        }
+
+        .scenario-card p {
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+
         .role-badge {
             display: inline-flex;
             align-items: center;
@@ -414,16 +550,26 @@
 
         footer {
             text-align: center;
-            padding: 20px;
-            color: #555;
+            padding: 25px 20px;
+            color: #888;
             font-size: 0.85em;
             border-top: 1px solid rgba(255,255,255,0.1);
             margin-top: 30px;
+            line-height: 1.6;
         }
 
         footer a {
             color: #00b347;
             text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #ffd700;
+        }
+
+        footer strong {
+            color: #ccc;
         }
 
         .lang-toggle {
@@ -480,7 +626,7 @@
             <!-- Start Screen -->
             <div id="start-screen" class="screen active">
                 <div class="card">
-                    <h2 data-en="Welcome, Advisor" data-pt="Bem-vindo, Assessor">Bem-vindo, Assessor</h2>
+                    <h2 data-en="Welcome, Advisor" data-pt="Bem-vindo, Analista">Bem-vindo, Analista</h2>
                     <p data-en="The year is 2026. Brazil faces unprecedented geopolitical pressures. The Trump administration is reshaping hemispheric relations. China's economic troubles ripple through commodity markets—but Chinese investment in AI and green energy is surging. AI-powered disinformation threatens October's elections. Data centers demand massive energy. The future is being decided now."
                        data-pt="Estamos em 2026. O Brasil enfrenta pressões geopolíticas sem precedentes. O governo Trump está remodelando as relações hemisféricas. Os problemas econômicos da China afetam os mercados de commodities—mas o investimento chinês em IA e energia verde está disparando. Desinformação alimentada por IA ameaça as eleições de outubro. Data centers demandam energia massiva. O futuro está sendo decidido agora.">
                        Estamos em 2026. O Brasil enfrenta pressões geopolíticas sem precedentes. O governo Trump está remodelando as relações hemisféricas. Os problemas econômicos da China afetam os mercados de commodities—mas o investimento chinês em IA e energia verde está disparando. Desinformação alimentada por IA ameaça as eleições de outubro. Data centers demandam energia massiva. O futuro está sendo decidido agora.
@@ -504,44 +650,49 @@
                     <h3 data-en="Select Your Crisis" data-pt="Escolha Sua Crise">Escolha Sua Crise</h3>
                     <div class="scenario-grid">
                         <div class="scenario-card" onclick="startScenario('trump_pressure')">
+                            <span class="scenario-icon">🦅</span>
                             <h3 data-en="The Trump Ultimatum" data-pt="O Ultimato de Trump">O Ultimato de Trump</h3>
-                            <p data-en="Washington demands critical minerals access and threatens tariffs. How much sovereignty will Brazil trade for market access?"
-                               data-pt="Washington exige acesso a minerais críticos e ameaça tarifas. Quanta soberania o Brasil vai trocar por acesso ao mercado?">
-                               Washington exige acesso a minerais críticos e ameaça tarifas. Quanta soberania o Brasil vai trocar por acesso ao mercado?
+                            <p data-en="Tariffs or minerals? How much sovereignty for market access?"
+                               data-pt="Tarifas ou minerais? Quanta soberania por acesso ao mercado?">
+                               Tarifas ou minerais? Quanta soberania por acesso ao mercado?
                             </p>
-                            <span class="risk-tag">Risco #3: Doutrina Donroe</span>
+                            <span class="risk-tag">Risco #3</span>
                         </div>
                         <div class="scenario-card" onclick="startScenario('china_balance')">
+                            <span class="scenario-icon">⚖️</span>
                             <h3 data-en="The China Dilemma" data-pt="O Dilema da China">O Dilema da China</h3>
-                            <p data-en="Brazil's largest trading partner is in crisis. The US pressures decoupling. Can Brazil balance both giants?"
-                               data-pt="O maior parceiro comercial do Brasil está em crise. Os EUA pressionam pelo desacoplamento. O Brasil consegue equilibrar os dois gigantes?">
-                               O maior parceiro comercial do Brasil está em crise. Os EUA pressionam pelo desacoplamento. O Brasil consegue equilibrar os dois gigantes?
+                            <p data-en="Your biggest partner in crisis. Can you balance both giants?"
+                               data-pt="Seu maior parceiro em crise. Consegue equilibrar os gigantes?">
+                               Seu maior parceiro em crise. Consegue equilibrar os gigantes?
                             </p>
-                            <span class="risk-tag">Risco #7: Armadilha Deflacionária</span>
+                            <span class="risk-tag">Risco #7</span>
                         </div>
                         <div class="scenario-card" onclick="startScenario('venezuela_crisis')">
+                            <span class="scenario-icon">🚨</span>
                             <h3 data-en="Venezuela Next Door" data-pt="Venezuela ao Lado">Venezuela ao Lado</h3>
-                            <p data-en="Maduro falls. Chaos erupts. Refugees surge toward Roraima. What role will Brazil play in its neighbor's future?"
-                               data-pt="Maduro cai. O caos irrompe. Refugiados avançam para Roraima. Qual papel o Brasil terá no futuro do vizinho?">
-                               Maduro cai. O caos irrompe. Refugiados avançam para Roraima. Qual papel o Brasil terá no futuro do vizinho?
+                            <p data-en="Maduro falls. Chaos erupts. Refugees surge. What's Brazil's role?"
+                               data-pt="Maduro cai. Caos irrompe. Refugiados avançam. Qual o papel do Brasil?">
+                               Maduro cai. Caos irrompe. Refugiados avançam. Qual o papel do Brasil?
                             </p>
-                            <span class="risk-tag">Risco #3: Doutrina Donroe</span>
+                            <span class="risk-tag">Risco #3</span>
                         </div>
                         <div class="scenario-card" onclick="startScenario('ai_elections')">
+                            <span class="scenario-icon">🤖</span>
                             <h3 data-en="The Digital Election" data-pt="A Eleição Digital">A Eleição Digital</h3>
-                            <p data-en="Deepfakes flood social media. AI chatbots spread disinformation. Foreign data centers power it all. Can democracy survive the algorithm?"
-                               data-pt="Deepfakes inundam as redes sociais. Chatbots de IA espalham desinformação. Data centers estrangeiros alimentam tudo. A democracia sobreviverá ao algoritmo?">
-                               Deepfakes inundam as redes sociais. Chatbots de IA espalham desinformação. Data centers estrangeiros alimentam tudo. A democracia sobreviverá ao algoritmo?
+                            <p data-en="Deepfakes. Disinformation. Data centers. Can democracy survive AI?"
+                               data-pt="Deepfakes. Desinformação. Data centers. A democracia sobrevive à IA?">
+                               Deepfakes. Desinformação. Data centers. A democracia sobrevive à IA?
                             </p>
-                            <span class="risk-tag">Risco #8: IA Devora Seus Usuários</span>
+                            <span class="risk-tag">Risco #8</span>
                         </div>
                         <div class="scenario-card" onclick="startScenario('electrotech_energy')">
+                            <span class="scenario-icon">⚡</span>
                             <h3 data-en="The Green Power Race" data-pt="A Corrida da Energia Verde">A Corrida da Energia Verde</h3>
-                            <p data-en="China offers cheap solar and batteries. AI data centers demand massive energy. Brazil's grid is the prize. Who controls the future?"
-                               data-pt="A China oferece painéis solares e baterias baratos. Data centers de IA demandam energia massiva. A rede brasileira é o prêmio. Quem controla o futuro?">
-                               A China oferece painéis solares e baterias baratos. Data centers de IA demandam energia massiva. A rede brasileira é o prêmio. Quem controla o futuro?
+                            <p data-en="Cheap solar vs sovereignty. AI needs energy. Who controls the grid?"
+                               data-pt="Solar barato vs soberania. IA precisa de energia. Quem controla a rede?">
+                               Solar barato vs soberania. IA precisa de energia. Quem controla a rede?
                             </p>
-                            <span class="risk-tag">Risco #2: Dominância Eletrotecnológica</span>
+                            <span class="risk-tag">Risco #2</span>
                         </div>
                     </div>
                 </div>
@@ -626,8 +777,17 @@
         </div>
 
         <footer>
-            <p data-en="Based on" data-pt="Baseado no">Baseado no <a href="#">Eurasia Group Top Risks 2026</a> |
-            <span data-en="Educational Simulator for Brazilian Audiences" data-pt="Simulador Educacional para o Público Brasileiro">Simulador Educacional para o Público Brasileiro</span></p>
+            <p>
+                <span data-en="Based on " data-pt="Baseado no ">Baseado no </span>
+                <a href="https://www.eurasiagroup.net/issues/top-risks-2026" target="_blank">Eurasia Group Top Risks 2026</a>
+            </p>
+            <p style="margin-top: 8px;">
+                <span data-en="Created by " data-pt="Criado por ">Criado por </span>
+                <strong>Fausto Sá Teles</strong> & <strong>Claude</strong> (Anthropic)
+            </p>
+            <p style="margin-top: 5px; font-size: 0.8em; opacity: 0.7;">
+                <span data-en="Educational simulator — not affiliated with Eurasia Group" data-pt="Simulador educacional — sem afiliação com Eurasia Group">Simulador educacional — sem afiliação com Eurasia Group</span>
+            </p>
         </footer>
     </div>
 
@@ -657,7 +817,12 @@
                         },
                         choices: [
                             {
-                                label: { en: "Option A: Accept the Deal", pt: "Opção A: Aceitar o Acordo" },
+                                label: { en: "Accept the Deal", pt: "Aceitar o Acordo" },
+                                icon: "🤝",
+                                shortText: {
+                                    en: "Give US companies preferential access. Trade sovereignty for market access.",
+                                    pt: "Dar acesso preferencial às empresas dos EUA. Trocar soberania por mercado."
+                                },
                                 text: {
                                     en: "Recommend accepting preferential access for US companies in exchange for tariff relief. Brazil needs the American market more than sovereignty over mining rights.",
                                     pt: "Recomendar aceitar o acesso preferencial para empresas americanas em troca de alívio tarifário. O Brasil precisa mais do mercado americano do que da soberania sobre direitos minerários."
@@ -667,7 +832,12 @@
                                 optimal: false
                             },
                             {
-                                label: { en: "Option B: Counter-Proposal", pt: "Opção B: Contraproposta" },
+                                label: { en: "Counter-Proposal", pt: "Contraproposta" },
+                                icon: "♟️",
+                                shortText: {
+                                    en: "Negotiate joint ventures with tech transfer. Buy time, build alternatives.",
+                                    pt: "Negociar joint ventures com transferência de tecnologia. Ganhar tempo."
+                                },
                                 text: {
                                     en: "Recommend a counter-offer: joint ventures with technology transfer, Brazilian processing of minerals domestically, and a gradual tariff reduction schedule. Buy time to build alternatives.",
                                     pt: "Recomendar uma contraproposta: joint ventures com transferência de tecnologia, processamento brasileiro de minerais domesticamente e um cronograma gradual de redução tarifária. Ganhar tempo para construir alternativas."
@@ -677,7 +847,12 @@
                                 optimal: true
                             },
                             {
-                                label: { en: "Option C: Defiant Rejection", pt: "Opção C: Rejeição Desafiadora" },
+                                label: { en: "Defiant Rejection", pt: "Rejeição Desafiadora" },
+                                icon: "✊",
+                                shortText: {
+                                    en: "Publicly reject as neo-colonialism. Rally Latin America. Pivot to China/EU.",
+                                    pt: "Rejeitar publicamente como neocolonialismo. Unir América Latina. Virar para China/UE."
+                                },
                                 text: {
                                     en: "Recommend publicly rejecting US pressure as neo-colonialism. Rally Latin American solidarity. Announce expanded partnerships with China and the EU.",
                                     pt: "Recomendar rejeitar publicamente a pressão dos EUA como neocolonialismo. Mobilizar a solidariedade latino-americana. Anunciar parcerias expandidas com a China e a UE."
@@ -696,7 +871,12 @@
                         },
                         choices: [
                             {
-                                label: { en: "Option A: Escalate", pt: "Opção A: Escalar" },
+                                label: { en: "Escalate", pt: "Escalar" },
+                                icon: "🔥",
+                                shortText: {
+                                    en: "Expel diplomats. Restrict US tech. Fast-track China deal. Fight back.",
+                                    pt: "Expulsar diplomatas. Restringir tech dos EUA. Acelerar acordo com China."
+                                },
                                 text: {
                                     en: "Recommend retaliatory measures: expel US diplomats, restrict American tech companies, fast-track the China minerals deal. Show Brazil won't be bullied.",
                                     pt: "Recomendar medidas retaliatórias: expulsar diplomatas americanos, restringir empresas de tecnologia americanas, acelerar o acordo de minerais com a China. Mostrar que o Brasil não será intimidado."
@@ -706,7 +886,12 @@
                                 optimal: false
                             },
                             {
-                                label: { en: "Option B: Strategic Patience", pt: "Opção B: Paciência Estratégica" },
+                                label: { en: "Strategic Patience", pt: "Paciência Estratégica" },
+                                icon: "🧘",
+                                shortText: {
+                                    en: "Quiet diplomacy. Wait it out. Don't give Trump his confrontation.",
+                                    pt: "Diplomacia discreta. Esperar. Não dar a Trump seu confronto."
+                                },
                                 text: {
                                     en: "Recommend quiet diplomacy. The sanctions are embarrassing but temporary. Keep negotiating behind the scenes. Don't give Trump the confrontation he wants before midterms.",
                                     pt: "Recomendar diplomacia discreta. As sanções são embaraçosas mas temporárias. Continuar negociando nos bastidores. Não dar a Trump o confronto que ele quer antes das eleições de meio de mandato."
@@ -716,7 +901,12 @@
                                 optimal: true
                             },
                             {
-                                label: { en: "Option C: Public Compromise", pt: "Opção C: Compromisso Público" },
+                                label: { en: "Public Compromise", pt: "Compromisso Público" },
+                                icon: "🎭",
+                                shortText: {
+                                    en: "Vague 'partnership' announcement. Give Trump a headline, keep flexibility.",
+                                    pt: "Anúncio vago de 'parceria'. Dar manchete a Trump, manter flexibilidade."
+                                },
                                 text: {
                                     en: "Recommend a face-saving deal: announce a 'strategic partnership' on critical minerals with vague terms. Give Trump a headline; preserve room to maneuver.",
                                     pt: "Recomendar um acordo para salvar as aparências: anunciar uma 'parceria estratégica' em minerais críticos com termos vagos. Dar a Trump uma manchete; preservar espaço de manobra."
@@ -821,7 +1011,12 @@
                         },
                         choices: [
                             {
-                                label: { en: "Option A: Pivot to Washington", pt: "Opção A: Virar para Washington" },
+                                label: { en: "Pivot to Washington", pt: "Virar para Washington" },
+                                icon: "🇺🇸",
+                                shortText: {
+                                    en: "Restrict Chinese investment. Accept US terms. Decouple now.",
+                                    pt: "Restringir investimento chinês. Aceitar termos dos EUA. Desacoplar."
+                                },
                                 text: {
                                     en: "Recommend restricting Chinese investment in strategic sectors. Accept US terms. Diversify away from China dependence before it's too late.",
                                     pt: "Recomendar restringir investimento chinês em setores estratégicos. Aceitar os termos dos EUA. Diversificar para longe da dependência da China antes que seja tarde demais."
@@ -831,7 +1026,12 @@
                                 optimal: false
                             },
                             {
-                                label: { en: "Option B: Balanced Hedging", pt: "Opção B: Hedge Equilibrado" },
+                                label: { en: "Balanced Hedging", pt: "Hedge Equilibrado" },
+                                icon: "⚖️",
+                                shortText: {
+                                    en: "Keep both relationships. Seek new markets: India, EU, Gulf. Don't pick sides.",
+                                    pt: "Manter ambos os laços. Buscar novos mercados: Índia, UE, Golfo. Não escolher lados."
+                                },
                                 text: {
                                     en: "Recommend maintaining ties with both powers. Negotiate with Washington without breaking with Beijing. Seek alternative markets in India, EU, and Gulf states. Don't pick sides.",
                                     pt: "Recomendar manter laços com ambas as potências. Negociar com Washington sem romper com Pequim. Buscar mercados alternativos na Índia, UE e países do Golfo. Não escolher lados."
@@ -841,7 +1041,12 @@
                                 optimal: true
                             },
                             {
-                                label: { en: "Option C: Double Down on China", pt: "Opção C: Dobrar a Aposta na China" },
+                                label: { en: "Double Down on China", pt: "Dobrar a Aposta na China" },
+                                icon: "🇨🇳",
+                                shortText: {
+                                    en: "Deepen Beijing ties. Deflation is temporary. Accept more Chinese FDI.",
+                                    pt: "Aprofundar laços com Pequim. Deflação é temporária. Mais investimento chinês."
+                                },
                                 text: {
                                     en: "Recommend deepening ties with Beijing. China's deflation is temporary; it remains Brazil's largest market. Accept more Chinese investment to offset US pressure.",
                                     pt: "Recomendar aprofundar laços com Pequim. A deflação da China é temporária; ela continua sendo o maior mercado do Brasil. Aceitar mais investimento chinês para compensar a pressão dos EUA."
@@ -860,7 +1065,12 @@
                         },
                         choices: [
                             {
-                                label: { en: "Option A: Block the Factory", pt: "Opção A: Bloquear a Fábrica" },
+                                label: { en: "Block the Factory", pt: "Bloquear a Fábrica" },
+                                icon: "🚫",
+                                shortText: {
+                                    en: "Block on 'national security'. Preserve US ties. Jobs can come elsewhere.",
+                                    pt: "Bloquear por 'segurança nacional'. Preservar laços com EUA."
+                                },
                                 text: {
                                     en: "Recommend blocking or delaying the BYD investment on 'national security' grounds. Preserve the US relationship. The jobs can come from somewhere else.",
                                     pt: "Recomendar bloquear ou atrasar o investimento da BYD por motivos de 'segurança nacional.' Preservar o relacionamento com os EUA. Os empregos podem vir de outro lugar."
@@ -870,7 +1080,12 @@
                                 optimal: false
                             },
                             {
-                                label: { en: "Option B: Conditional Approval", pt: "Opção B: Aprovação Condicional" },
+                                label: { en: "Conditional Approval", pt: "Aprovação Condicional" },
+                                icon: "📋",
+                                shortText: {
+                                    en: "Approve with conditions: local content, data rules, tech transfer. Smart policy.",
+                                    pt: "Aprovar com condições: conteúdo local, dados, transferência de tecnologia."
+                                },
                                 text: {
                                     en: "Recommend approving with conditions: local content requirements, data localization, technology transfer guarantees. Frame it as industrial policy, not geopolitics.",
                                     pt: "Recomendar aprovar com condições: requisitos de conteúdo local, localização de dados, garantias de transferência de tecnologia. Enquadrar como política industrial, não geopolítica."
@@ -880,7 +1095,12 @@
                                 optimal: true
                             },
                             {
-                                label: { en: "Option C: Full Welcome", pt: "Opção C: Boas-Vindas Totais" },
+                                label: { en: "Full Welcome", pt: "Boas-Vindas Totais" },
+                                icon: "🎉",
+                                shortText: {
+                                    en: "Open arms, minimal conditions. We need the jobs. Let Washington complain.",
+                                    pt: "Braços abertos, condições mínimas. Precisamos dos empregos."
+                                },
                                 text: {
                                     en: "Recommend welcoming BYD with open arms and minimal conditions. Brazil needs the investment and jobs. Let Washington complain.",
                                     pt: "Recomendar receber a BYD de braços abertos e condições mínimas. O Brasil precisa do investimento e dos empregos. Deixe Washington reclamar."
@@ -985,7 +1205,12 @@
                         },
                         choices: [
                             {
-                                label: { en: "Option A: Full Support", pt: "Opção A: Apoio Total" },
+                                label: { en: "Full Support", pt: "Apoio Total" },
+                                icon: "🤝",
+                                shortText: {
+                                    en: "Recognize opposition. Open borders. Offer military support. Stand with Washington.",
+                                    pt: "Reconhecer oposição. Abrir fronteiras. Apoio militar. Ficar com Washington."
+                                },
                                 text: {
                                     en: "Recommend immediately recognizing the opposition, opening borders for humanitarian aid, and offering Brazilian military support for stabilization. Stand with Washington.",
                                     pt: "Recomendar reconhecer imediatamente a oposição, abrir fronteiras para ajuda humanitária e oferecer apoio militar brasileiro para estabilização. Ficar ao lado de Washington."
@@ -995,7 +1220,12 @@
                                 optimal: false
                             },
                             {
-                                label: { en: "Option B: Cautious Engagement", pt: "Opção B: Engajamento Cauteloso" },
+                                label: { en: "Cautious Engagement", pt: "Engajamento Cauteloso" },
+                                icon: "🕊️",
+                                shortText: {
+                                    en: "Humanitarian aid only. Inclusive dialogue. Don't be Washington's proxy.",
+                                    pt: "Só ajuda humanitária. Diálogo inclusivo. Não ser proxy de Washington."
+                                },
                                 text: {
                                     en: "Recommend humanitarian assistance without political recognition yet. Call for inclusive dialogue including regime figures willing to negotiate. Avoid being seen as Washington's proxy.",
                                     pt: "Recomendar assistência humanitária sem reconhecimento político ainda. Pedir diálogo inclusivo incluindo figuras do regime dispostas a negociar. Evitar ser visto como proxy de Washington."
@@ -1005,7 +1235,12 @@
                                 optimal: true
                             },
                             {
-                                label: { en: "Option C: Non-Interference", pt: "Opção C: Não-Interferência" },
+                                label: { en: "Non-Interference", pt: "Não-Interferência" },
+                                icon: "🚧",
+                                shortText: {
+                                    en: "Stay out. Venezuela's problem. Focus on our borders only.",
+                                    pt: "Ficar fora. Problema da Venezuela. Focar só em nossas fronteiras."
+                                },
                                 text: {
                                     en: "Recommend staying out entirely. This is Venezuela's internal affair. The US created this mess; let them handle it. Focus on border security and refugee management.",
                                     pt: "Recomendar ficar totalmente fora. Este é um assunto interno da Venezuela. Os EUA criaram essa bagunça; deixe-os resolver. Focar em segurança de fronteira e gestão de refugiados."
@@ -1024,7 +1259,12 @@
                         },
                         choices: [
                             {
-                                label: { en: "Option A: Close the Border", pt: "Opção A: Fechar a Fronteira" },
+                                label: { en: "Close the Border", pt: "Fechar a Fronteira" },
+                                icon: "🚫",
+                                shortText: {
+                                    en: "Deploy military. Restrict crossings. Let others share the burden.",
+                                    pt: "Mobilizar militares. Restringir travessias. Deixar outros dividirem o fardo."
+                                },
                                 text: {
                                     en: "Recommend restricting border crossings and deploying military to prevent uncontrolled migration. Brazil can't absorb unlimited refugees. Let Colombia and the US share the burden.",
                                     pt: "Recomendar restringir travessias de fronteira e mobilizar militares para prevenir migração descontrolada. O Brasil não pode absorver refugiados ilimitados. Deixe Colômbia e EUA compartilharem o fardo."
@@ -1034,7 +1274,12 @@
                                 optimal: false
                             },
                             {
-                                label: { en: "Option B: Regional Solution", pt: "Opção B: Solução Regional" },
+                                label: { en: "Regional Solution", pt: "Solução Regional" },
+                                icon: "🌎",
+                                shortText: {
+                                    en: "Lead regional coalition. Share burden. Brazil as responsible leader.",
+                                    pt: "Liderar coalizão regional. Dividir fardo. Brasil como líder responsável."
+                                },
                                 text: {
                                     en: "Recommend leading a regional coalition—Colombia, Peru, Ecuador, Brazil—to share refugee burden and coordinate support for Venezuela's transition. Position Brazil as the responsible leader.",
                                     pt: "Recomendar liderar uma coalizão regional—Colômbia, Peru, Equador, Brasil—para compartilhar o fardo de refugiados e coordenar apoio para a transição da Venezuela. Posicionar o Brasil como líder responsável."
@@ -1044,7 +1289,12 @@
                                 optimal: true
                             },
                             {
-                                label: { en: "Option C: US Partnership", pt: "Opção C: Parceria com EUA" },
+                                label: { en: "US Partnership", pt: "Parceria com EUA" },
+                                icon: "🇺🇸",
+                                shortText: {
+                                    en: "Full partnership with Washington. Get US funding. Be the regional anchor.",
+                                    pt: "Parceria total com Washington. Obter fundos dos EUA. Ser âncora regional."
+                                },
                                 text: {
                                     en: "Recommend accepting Washington's request for full partnership. Request US funding and resources for refugee management. Become the anchor for US policy in the region.",
                                     pt: "Recomendar aceitar o pedido de Washington por parceria total. Solicitar financiamento e recursos dos EUA para gestão de refugiados. Tornar-se a âncora para a política dos EUA na região."
@@ -1149,7 +1399,12 @@
                         },
                         choices: [
                             {
-                                label: { en: "Option A: Aggressive Takedown", pt: "Opção A: Remoção Agressiva" },
+                                label: { en: "Aggressive Takedown", pt: "Remoção Agressiva" },
+                                icon: "⚖️",
+                                shortText: {
+                                    en: "Force takedowns. Fine platforms. Investigate data center. Make an example.",
+                                    pt: "Forçar remoções. Multar plataformas. Investigar data center. Dar exemplo."
+                                },
                                 text: {
                                     en: "Recommend immediate platform takedowns, fines for social media companies, and a TSE investigation into the data center. Make an example to deter future attacks.",
                                     pt: "Recomendar remoções imediatas das plataformas, multas para empresas de redes sociais e uma investigação do TSE sobre o data center. Dar um exemplo para dissuadir ataques futuros."
@@ -1159,7 +1414,12 @@
                                 optimal: false
                             },
                             {
-                                label: { en: "Option B: Rapid Response + Verification", pt: "Opção B: Resposta Rápida + Verificação" },
+                                label: { en: "Rapid Response + Verification", pt: "Resposta Rápida + Verificação" },
+                                icon: "🔍",
+                                shortText: {
+                                    en: "Coordinate fact-checkers. TSE statement. AI detection labels. Inoculate voters.",
+                                    pt: "Coordenar checadores. Declaração do TSE. Rótulos de IA. Inocular eleitores."
+                                },
                                 text: {
                                     en: "Recommend a coordinated fact-checking response: TSE official statement, partnerships with verification agencies, and AI detection tools to label the content. Focus on inoculating voters rather than censorship.",
                                     pt: "Recomendar uma resposta coordenada de checagem de fatos: declaração oficial do TSE, parcerias com agências de verificação e ferramentas de detecção de IA para rotular o conteúdo. Focar em inocular eleitores em vez de censura."
@@ -1169,7 +1429,12 @@
                                 optimal: true
                             },
                             {
-                                label: { en: "Option C: Platform Self-Regulation", pt: "Opção C: Autorregulação das Plataformas" },
+                                label: { en: "Platform Self-Regulation", pt: "Autorregulação das Plataformas" },
+                                icon: "🏢",
+                                shortText: {
+                                    en: "Let platforms handle it. Avoid looking political. Trust their AI moderation.",
+                                    pt: "Deixar plataformas lidarem. Evitar parecer político. Confiar na moderação delas."
+                                },
                                 text: {
                                     en: "Recommend letting platforms handle it with their own AI detection systems. Government intervention would be seen as political. Trust the tech companies' content moderation.",
                                     pt: "Recomendar deixar as plataformas lidarem com isso com seus próprios sistemas de detecção de IA. Intervenção governamental seria vista como política. Confiar na moderação de conteúdo das empresas de tecnologia."
@@ -1188,7 +1453,12 @@
                         },
                         choices: [
                             {
-                                label: { en: "Option A: Block on Security Grounds", pt: "Opção A: Bloquear por Segurança" },
+                                label: { en: "Block on Security Grounds", pt: "Bloquear por Segurança" },
+                                icon: "🛡️",
+                                shortText: {
+                                    en: "Block as security risk. Electoral data too sensitive. Find Western alternatives.",
+                                    pt: "Bloquear como risco de segurança. Dados eleitorais sensíveis demais. Buscar alternativas."
+                                },
                                 text: {
                                     en: "Recommend blocking the data center as a national security risk. Electoral data and AI compute power are too sensitive for foreign control. Seek US or European alternatives.",
                                     pt: "Recomendar bloquear o data center como risco de segurança nacional. Dados eleitorais e poder computacional de IA são sensíveis demais para controle estrangeiro. Buscar alternativas americanas ou europeias."
@@ -1198,7 +1468,12 @@
                                 optimal: false
                             },
                             {
-                                label: { en: "Option B: Sovereign AI Framework", pt: "Opção B: Marco de IA Soberana" },
+                                label: { en: "Sovereign AI Framework", pt: "Marco de IA Soberana" },
+                                icon: "🏛️",
+                                shortText: {
+                                    en: "Strict conditions: data localization, Brazilian oversight, separate electoral systems.",
+                                    pt: "Condições rigorosas: localização de dados, supervisão brasileira, sistemas eleitorais separados."
+                                },
                                 text: {
                                     en: "Recommend approving with strict conditions: data localization for sensitive systems, Brazilian oversight of AI models, energy efficiency requirements, and a separate sovereign facility for electoral systems. Use Chinese infrastructure without dependency.",
                                     pt: "Recomendar aprovar com condições rigorosas: localização de dados para sistemas sensíveis, supervisão brasileira de modelos de IA, requisitos de eficiência energética e uma instalação soberana separada para sistemas eleitorais. Usar infraestrutura chinesa sem dependência."
@@ -1208,7 +1483,12 @@
                                 optimal: true
                             },
                             {
-                                label: { en: "Option C: Full Approval", pt: "Opção C: Aprovação Total" },
+                                label: { en: "Full Approval", pt: "Aprovação Total" },
+                                icon: "✅",
+                                shortText: {
+                                    en: "Approve with minimal conditions. We need AI to compete. Security concerns overblown.",
+                                    pt: "Aprovar com condições mínimas. Precisamos de IA para competir. Segurança exagerada."
+                                },
                                 text: {
                                     en: "Recommend full approval with minimal conditions. Brazil needs AI infrastructure to compete. Security concerns are overblown. The jobs and technology transfer are worth the geopolitical friction.",
                                     pt: "Recomendar aprovação total com condições mínimas. O Brasil precisa de infraestrutura de IA para competir. Preocupações de segurança são exageradas. Os empregos e transferência de tecnologia valem o atrito geopolítico."
@@ -1313,7 +1593,12 @@
                         },
                         choices: [
                             {
-                                label: { en: "Option A: Protective Tariffs", pt: "Opção A: Tarifas Protecionistas" },
+                                label: { en: "Protective Tariffs", pt: "Tarifas Protecionistas" },
+                                icon: "🏭",
+                                shortText: {
+                                    en: "Tariffs on Chinese solar/batteries. Protect domestic industry. Build capacity.",
+                                    pt: "Tarifas sobre solar/baterias chinesas. Proteger indústria nacional. Construir capacidade."
+                                },
                                 text: {
                                     en: "Recommend tariffs on Chinese solar and batteries to protect domestic industry. Brazil must build its own manufacturing capacity. Short-term pain for long-term independence.",
                                     pt: "Recomendar tarifas sobre painéis solares e baterias chinesas para proteger a indústria doméstica. O Brasil deve construir sua própria capacidade de fabricação. Dor de curto prazo para independência de longo prazo."
@@ -1323,7 +1608,12 @@
                                 optimal: false
                             },
                             {
-                                label: { en: "Option B: Conditional Access", pt: "Opção B: Acesso Condicional" },
+                                label: { en: "Conditional Access", pt: "Acesso Condicional" },
+                                icon: "🤝",
+                                shortText: {
+                                    en: "Allow imports with conditions: local assembly, tech partnerships, domestic content.",
+                                    pt: "Permitir importações com condições: montagem local, parcerias, conteúdo doméstico."
+                                },
                                 text: {
                                     en: "Recommend allowing imports but requiring local assembly, technology partnerships, and gradual increase in domestic content. Brazil gets cheap green tech AND builds local capacity over time.",
                                     pt: "Recomendar permitir importações mas exigindo montagem local, parcerias de tecnologia e aumento gradual de conteúdo doméstico. O Brasil obtém tecnologia verde barata E constrói capacidade local ao longo do tempo."
@@ -1333,7 +1623,12 @@
                                 optimal: true
                             },
                             {
-                                label: { en: "Option C: Open Markets", pt: "Opção C: Mercados Abertos" },
+                                label: { en: "Open Markets", pt: "Mercados Abertos" },
+                                icon: "🌐",
+                                shortText: {
+                                    en: "Full free trade. Cheap tech benefits consumers & climate. Let market decide.",
+                                    pt: "Livre comércio total. Tech barata beneficia consumidores e clima. Mercado decide."
+                                },
                                 text: {
                                     en: "Recommend keeping markets fully open. Consumers and the climate benefit from cheap Chinese tech. Domestic manufacturers should innovate or exit. Don't fight China's comparative advantage.",
                                     pt: "Recomendar manter mercados totalmente abertos. Consumidores e o clima se beneficiam de tecnologia chinesa barata. Fabricantes domésticos devem inovar ou sair. Não lutar contra a vantagem comparativa da China."
@@ -1352,7 +1647,12 @@
                         },
                         choices: [
                             {
-                                label: { en: "Option A: European Partnership", pt: "Opção A: Parceria Europeia" },
+                                label: { en: "European Partnership", pt: "Parceria Europeia" },
+                                icon: "🇪🇺",
+                                shortText: {
+                                    en: "Take EU deal. Green standards, Mercosur ties. Less money, more alignment.",
+                                    pt: "Aceitar acordo UE. Padrões verdes, laços Mercosul. Menos dinheiro, mais alinhamento."
+                                },
                                 text: {
                                     en: "Recommend the European deal. EU-Mercosur implementation depends on green cooperation. European standards will ensure market access. Accept lower investment for Western alignment.",
                                     pt: "Recomendar o acordo europeu. A implementação do EU-Mercosul depende de cooperação verde. Padrões europeus garantirão acesso ao mercado. Aceitar investimento menor pelo alinhamento ocidental."
@@ -1362,7 +1662,12 @@
                                 optimal: false
                             },
                             {
-                                label: { en: "Option B: Competitive Bidding", pt: "Opção B: Licitação Competitiva" },
+                                label: { en: "Competitive Bidding", pt: "Licitação Competitiva" },
+                                icon: "♟️",
+                                shortText: {
+                                    en: "Split projects. Play EU vs China. Keep infrastructure control. Best terms.",
+                                    pt: "Dividir projetos. Jogar UE vs China. Manter controle. Melhores termos."
+                                },
                                 text: {
                                     en: "Recommend splitting projects across multiple partners. Europeans get some plants, Chinese get others, Brazilians retain infrastructure control. Play them against each other for better terms.",
                                     pt: "Recomendar dividir projetos entre múltiplos parceiros. Europeus ficam com algumas plantas, chineses com outras, brasileiros mantêm controle da infraestrutura. Jogar um contra o outro por melhores termos."
@@ -1372,7 +1677,12 @@
                                 optimal: true
                             },
                             {
-                                label: { en: "Option C: Chinese Investment", pt: "Opção C: Investimento Chinês" },
+                                label: { en: "Chinese Investment", pt: "Investimento Chinês" },
+                                icon: "🇨🇳",
+                                shortText: {
+                                    en: "Take China's $20B. Faster deployment. US threats are bluster.",
+                                    pt: "Aceitar $20B da China. Implantação mais rápida. Ameaças dos EUA são blefe."
+                                },
                                 text: {
                                     en: "Recommend the Chinese deal. More money, faster deployment. US threats are bluster—they need Brazilian hydrogen too. China is already 70% of our green FDI anyway.",
                                     pt: "Recomendar o acordo chinês. Mais dinheiro, implantação mais rápida. Ameaças dos EUA são blefe—eles precisam do hidrogênio brasileiro também. A China já é 70% do nosso IED verde de qualquer forma."
@@ -1494,6 +1804,30 @@
             return obj[currentLang] || obj['en'] || obj;
         }
 
+        // Typewriter effect
+        let typewriterTimeout = null;
+        function typeWriter(element, text, speed = 15) {
+            if (typewriterTimeout) clearTimeout(typewriterTimeout);
+            element.innerHTML = '';
+            element.classList.add('typewriter');
+            let i = 0;
+            const cursor = document.createElement('span');
+            cursor.className = 'cursor';
+
+            function type() {
+                if (i < text.length) {
+                    element.textContent = text.substring(0, i + 1);
+                    element.appendChild(cursor);
+                    i++;
+                    typewriterTimeout = setTimeout(type, speed);
+                } else {
+                    // Remove cursor after typing complete
+                    setTimeout(() => cursor.remove(), 1000);
+                }
+            }
+            type();
+        }
+
         // Start a scenario
         function startScenario(scenarioId) {
             currentScenario = scenarios[scenarioId];
@@ -1520,7 +1854,8 @@
             if (situationText.includes('${previousOutcome}')) {
                 situationText = situationText.replace('${previousOutcome}', window.lastOutcomeText || '');
             }
-            document.getElementById('situation-text').textContent = situationText;
+            const situationEl = document.getElementById('situation-text');
+            typeWriter(situationEl, situationText, 12);
 
             const choicesContainer = document.getElementById('choices-container');
             choicesContainer.innerHTML = '';
@@ -1534,8 +1869,15 @@
                 const btn = document.createElement('button');
                 btn.className = 'choice-btn';
                 const optionLetter = String.fromCharCode(65 + displayIndex); // A, B, C
-                const labelText = t(choice.label).replace(/^(Option|Opção) [A-C]:?/i, `${currentLang === 'pt' ? 'Opção' : 'Option'} ${optionLetter}:`);
-                btn.innerHTML = `<span class="choice-label">${labelText}</span>${t(choice.text)}`;
+                const labelText = t(choice.label).replace(/^(Option|Opção) [A-C]:?/i, '').trim();
+                const icon = choice.icon || ['🎯', '🔄', '⚔️'][displayIndex] || '📌';
+                btn.innerHTML = `
+                    <span class="choice-icon">${icon}</span>
+                    <div class="choice-content">
+                        <span class="choice-label">${labelText}</span>
+                        <span class="choice-desc">${t(choice.shortText || choice.text)}</span>
+                    </div>
+                `;
                 btn.onclick = () => makeChoice(originalIndex);
                 choicesContainer.appendChild(btn);
             });
@@ -1556,11 +1898,24 @@
 
             document.getElementById('consequence-badge').textContent = t(currentScenario.badge);
             document.getElementById('consequence-title').textContent = t(consequence.title);
-            document.getElementById('consequence-text').textContent = consequenceText;
+
+            // Add consequence icon based on type
+            const consequenceIcon = {
+                positive: '✅',
+                negative: '⚠️',
+                neutral: '⚖️'
+            }[consequence.type] || '📋';
+
+            document.getElementById('consequence-text').innerHTML =
+                `<span class="consequence-icon">${consequenceIcon}</span>${consequenceText}`;
             document.getElementById('expert-insight').textContent = t(consequence.expert);
 
             const box = document.getElementById('consequence-box');
             box.className = 'consequence-box ' + consequence.type;
+            // Re-trigger animation
+            box.style.animation = 'none';
+            box.offsetHeight; // Trigger reflow
+            box.style.animation = null;
 
             const continueBtn = document.getElementById('continue-btn');
             continueBtn.textContent = currentStep < currentScenario.steps.length - 1
