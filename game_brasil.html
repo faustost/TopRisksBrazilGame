@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sala de Crise 2026 - Simulador Geopolítico Brasil</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a1628 0%, #0d2137 50%, #0a2e1f 100%);
+            min-height: 100vh;
+            color: #e8e8e8;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            font-weight: 300;
+            letter-spacing: 3px;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        header h1 span {
+            color: #00b347;
+            font-weight: 700;
+        }
+
+        header h1 .year {
+            color: #ffd700;
+        }
+
+        header p {
+            color: #888;
+            margin-top: 10px;
+            font-size: 1.1em;
+        }
+
+        header .subtitle {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 15px;
+            padding: 8px 20px;
+            background: rgba(0, 179, 71, 0.1);
+            border: 1px solid rgba(0, 179, 71, 0.3);
+            border-radius: 20px;
+            font-size: 0.9em;
+            color: #00b347;
+        }
+
+        .flag-colors {
+            display: flex;
+            gap: 3px;
+            margin-left: 5px;
+        }
+
+        .flag-colors span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .flag-green { background: #009c3b; }
+        .flag-yellow { background: #ffdf00; }
+        .flag-blue { background: #002776; }
+
+        .game-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .card h2 {
+            color: #00b347;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .card h3 {
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .scenario-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #009c3b, #006b2b);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .situation-text {
+            font-size: 1.1em;
+            color: #ccc;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            border-left: 4px solid #ffd700;
+        }
+
+        .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .choice-btn {
+            background: rgba(255,255,255,0.08);
+            border: 2px solid rgba(255,255,255,0.15);
+            color: #fff;
+            padding: 20px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-size: 1em;
+        }
+
+        .choice-btn:hover {
+            background: rgba(0, 179, 71, 0.2);
+            border-color: #00b347;
+            transform: translateX(10px);
+        }
+
+        .choice-btn .choice-label {
+            font-weight: bold;
+            color: #ffd700;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #009c3b, #006b2b);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #00b347, #008c3b);
+            transform: scale(1.05);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #ffd700;
+            border: 2px solid #ffd700;
+            padding: 12px 30px;
+            font-size: 1em;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 215, 0, 0.2);
+        }
+
+        .consequence-box {
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .consequence-box.positive {
+            background: rgba(0, 179, 71, 0.15);
+            border-left: 4px solid #00b347;
+        }
+
+        .consequence-box.negative {
+            background: rgba(220, 53, 69, 0.15);
+            border-left: 4px solid #dc3545;
+        }
+
+        .consequence-box.neutral {
+            background: rgba(255, 215, 0, 0.15);
+            border-left: 4px solid #ffd700;
+        }
+
+        .learn-more {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .learn-more h4 {
+            color: #00b347;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .learn-more p {
+            color: #aaa;
+            font-size: 0.95em;
+        }
+
+        .source-tag {
+            display: inline-block;
+            background: rgba(233, 69, 96, 0.2);
+            color: #e94560;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+
+        .score-display {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .score-number {
+            font-size: 4em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #009c3b, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .score-label {
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #009c3b, #ffd700);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .scenario-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .scenario-card {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .scenario-card:hover {
+            border-color: #00b347;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 179, 71, 0.2);
+        }
+
+        .scenario-card h3 {
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .scenario-card p {
+            color: #888;
+            font-size: 0.9em;
+        }
+
+        .scenario-card .risk-tag {
+            display: inline-block;
+            background: rgba(0, 179, 71, 0.3);
+            color: #00b347;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            margin-top: 10px;
+        }
+
+        .role-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 215, 0, 0.15);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            padding: 10px 20px;
+            border-radius: 25px;
+            margin-bottom: 20px;
+        }
+
+        .role-badge span {
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        .buttons-row {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        .stat-label {
+            color: #888;
+            font-size: 0.9em;
+            text-transform: uppercase;
+        }
+
+        .brazil-context {
+            background: linear-gradient(135deg, rgba(0, 156, 59, 0.1), rgba(255, 223, 0, 0.05));
+            border: 1px solid rgba(0, 156, 59, 0.2);
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+        }
+
+        .brazil-context h4 {
+            color: #ffd700;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .brazil-context p {
+            color: #aaa;
+            font-size: 0.9em;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #555;
+            font-size: 0.85em;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 30px;
+        }
+
+        footer a {
+            color: #00b347;
+            text-decoration: none;
+        }
+
+        .lang-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .lang-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #888;
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn.active {
+            background: rgba(0, 179, 71, 0.3);
+            border-color: #00b347;
+            color: #fff;
+        }
+
+        .lang-btn:hover {
+            border-color: #00b347;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="lang-toggle">
+            <button class="lang-btn active" onclick="setLang('pt')">PT</button>
+            <button class="lang-btn" onclick="setLang('en')">EN</button>
+        </div>
+
+        <header>
+            <h1>Sala de Crise <span>Brasil</span> <span class="year">2026</span></h1>
+            <p data-en="A Geopolitical Decision Simulator" data-pt="Simulador de Decisões Geopolíticas">Simulador de Decisões Geopolíticas</p>
+            <div class="subtitle">
+                <span data-en="Based on Eurasia Group Top Risks 2026" data-pt="Baseado no Eurasia Group Top Risks 2026">Baseado no Eurasia Group Top Risks 2026</span>
+                <div class="flag-colors">
+                    <span class="flag-green"></span>
+                    <span class="flag-yellow"></span>
+                    <span class="flag-blue"></span>
+                </div>
+            </div>
+        </header>
+
+        <div class="game-container">
+            <!-- Start Screen -->
+            <div id="start-screen" class="screen active">
+                <div class="card">
+                    <h2 data-en="Welcome, Advisor" data-pt="Bem-vindo, Assessor">Bem-vindo, Assessor</h2>
+                    <p data-en="The year is 2026. Brazil faces unprecedented geopolitical pressures. The Trump administration is reshaping hemispheric relations. China's economic troubles ripple through commodity markets. Venezuela's collapse creates regional instability."
+                       data-pt="Estamos em 2026. O Brasil enfrenta pressões geopolíticas sem precedentes. O governo Trump está remodelando as relações hemisféricas. Os problemas econômicos da China afetam os mercados de commodities. O colapso da Venezuela cria instabilidade regional.">
+                       Estamos em 2026. O Brasil enfrenta pressões geopolíticas sem precedentes. O governo Trump está remodelando as relações hemisféricas. Os problemas econômicos da China afetam os mercados de commodities. O colapso da Venezuela cria instabilidade regional.
+                    </p>
+                    <p style="margin-top: 15px; color: #888;"
+                       data-en="As a senior advisor to the Brazilian government, your decisions will determine whether Brazil emerges stronger—or gets caught in the crossfire of great power competition."
+                       data-pt="Como assessor sênior do governo brasileiro, suas decisões determinarão se o Brasil sairá fortalecido—ou será pego no fogo cruzado da competição entre grandes potências.">
+                       Como assessor sênior do governo brasileiro, suas decisões determinarão se o Brasil sairá fortalecido—ou será pego no fogo cruzado da competição entre grandes potências.
+                    </p>
+                </div>
+
+                <div class="brazil-context">
+                    <h4 data-en="Brazil in the Report" data-pt="O Brasil no Relatório">O Brasil no Relatório</h4>
+                    <p data-en="The Eurasia Group report mentions Brazil as a target of Trump's pressure campaign, facing 'punitive tariffs and sanctions' while negotiating for relief through critical minerals cooperation. Elections in Brazil are mentioned as targets for US influence."
+                       data-pt="O relatório do Eurasia Group menciona o Brasil como alvo da campanha de pressão de Trump, enfrentando 'tarifas punitivas e sanções' enquanto negocia alívio através da cooperação em minerais críticos. As eleições no Brasil são mencionadas como alvos de influência americana.">
+                       O relatório do Eurasia Group menciona o Brasil como alvo da campanha de pressão de Trump, enfrentando "tarifas punitivas e sanções" enquanto negocia alívio através da cooperação em minerais críticos. As eleições no Brasil são mencionadas como alvos de influência americana.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h3 data-en="Select Your Crisis" data-pt="Escolha Sua Crise">Escolha Sua Crise</h3>
+                    <div class="scenario-grid">
+                        <div class="scenario-card" onclick="startScenario('trump_pressure')">
+                            <h3 data-en="The Trump Ultimatum" data-pt="O Ultimato de Trump">O Ultimato de Trump</h3>
+                            <p data-en="Washington demands critical minerals access and threatens tariffs. How much sovereignty will Brazil trade for market access?"
+                               data-pt="Washington exige acesso a minerais críticos e ameaça tarifas. Quanta soberania o Brasil vai trocar por acesso ao mercado?">
+                               Washington exige acesso a minerais críticos e ameaça tarifas. Quanta soberania o Brasil vai trocar por acesso ao mercado?
+                            </p>
+                            <span class="risk-tag">Risco #3: Doutrina Donroe</span>
+                        </div>
+                        <div class="scenario-card" onclick="startScenario('china_balance')">
+                            <h3 data-en="The China Dilemma" data-pt="O Dilema da China">O Dilema da China</h3>
+                            <p data-en="Brazil's largest trading partner is in crisis. The US pressures decoupling. Can Brazil balance both giants?"
+                               data-pt="O maior parceiro comercial do Brasil está em crise. Os EUA pressionam pelo desacoplamento. O Brasil consegue equilibrar os dois gigantes?">
+                               O maior parceiro comercial do Brasil está em crise. Os EUA pressionam pelo desacoplamento. O Brasil consegue equilibrar os dois gigantes?
+                            </p>
+                            <span class="risk-tag">Risco #7: Armadilha Deflacionária</span>
+                        </div>
+                        <div class="scenario-card" onclick="startScenario('venezuela_crisis')">
+                            <h3 data-en="Venezuela Next Door" data-pt="Venezuela ao Lado">Venezuela ao Lado</h3>
+                            <p data-en="Maduro falls. Chaos erupts. Refugees surge toward Roraima. What role will Brazil play in its neighbor's future?"
+                               data-pt="Maduro cai. O caos irrompe. Refugiados avançam para Roraima. Qual papel o Brasil terá no futuro do vizinho?">
+                               Maduro cai. O caos irrompe. Refugiados avançam para Roraima. Qual papel o Brasil terá no futuro do vizinho?
+                            </p>
+                            <span class="risk-tag">Risco #3: Doutrina Donroe</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Screen -->
+            <div id="game-screen" class="screen">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <div class="role-badge" style="margin-bottom: 0;">
+                        <span id="role-display">Assessor Especial</span>
+                    </div>
+                    <button class="btn-secondary" onclick="backToMenu()" style="padding: 8px 20px; font-size: 0.9em;" data-en="← Back to Menu" data-pt="← Voltar ao Menu">← Voltar ao Menu</button>
+                </div>
+
+                <div class="card">
+                    <span class="scenario-badge" id="scenario-badge">Cenário</span>
+                    <h2 id="situation-title">Título da Situação</h2>
+                    <div class="situation-text" id="situation-text">
+                        A descrição da situação aparecerá aqui...
+                    </div>
+                    <div class="choices" id="choices-container">
+                        <!-- Choices inserted by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Consequence Screen -->
+            <div id="consequence-screen" class="screen">
+                <div class="card">
+                    <span class="scenario-badge" id="consequence-badge">Consequência</span>
+                    <h2 id="consequence-title">O Que Aconteceu</h2>
+                    <div class="consequence-box" id="consequence-box">
+                        <p id="consequence-text">Descrição da consequência...</p>
+                    </div>
+
+                    <div class="learn-more">
+                        <h4 data-en="What the Experts Say" data-pt="O Que Dizem os Especialistas">O Que Dizem os Especialistas <span class="source-tag">Eurasia Group</span></h4>
+                        <p id="expert-insight">Análise do relatório Top Risks 2026...</p>
+                    </div>
+
+                    <div class="buttons-row">
+                        <button class="btn-primary" id="continue-btn" onclick="continueGame()" data-en="Continue" data-pt="Continuar">Continuar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Screen -->
+            <div id="results-screen" class="screen">
+                <div class="card">
+                    <h2 data-en="Scenario Complete" data-pt="Cenário Concluído">Cenário Concluído</h2>
+                    <div class="score-display">
+                        <div class="score-number" id="final-score">0</div>
+                        <div class="score-label" data-en="Strategic Acumen" data-pt="Perspicácia Estratégica">Perspicácia Estratégica</div>
+                    </div>
+
+                    <div class="stats-row">
+                        <div class="stat-item">
+                            <div class="stat-value" id="decisions-made">0</div>
+                            <div class="stat-label" data-en="Decisions" data-pt="Decisões">Decisões</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="optimal-choices">0</div>
+                            <div class="stat-label" data-en="Optimal Choices" data-pt="Escolhas Ótimas">Escolhas Ótimas</div>
+                        </div>
+                    </div>
+
+                    <div class="learn-more">
+                        <h4 data-en="Key Takeaway" data-pt="Lição Principal">Lição Principal</h4>
+                        <p id="scenario-takeaway">O que você deve lembrar deste cenário...</p>
+                    </div>
+
+                    <div class="buttons-row">
+                        <button class="btn-secondary" onclick="restartScenario()" data-en="Replay" data-pt="Jogar Novamente">Jogar Novamente</button>
+                        <button class="btn-primary" onclick="backToMenu()" data-en="New Scenario" data-pt="Novo Cenário">Novo Cenário</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p data-en="Based on" data-pt="Baseado no">Baseado no <a href="#">Eurasia Group Top Risks 2026</a> |
+            <span data-en="Educational Simulator for Brazilian Audiences" data-pt="Simulador Educacional para o Público Brasileiro">Simulador Educacional para o Público Brasileiro</span></p>
+        </footer>
+    </div>
+
+    <script>
+        // Language state
+        let currentLang = 'pt';
+
+        // Game State
+        let currentScenario = null;
+        let currentStep = 0;
+        let score = 0;
+        let optimalChoices = 0;
+        let totalDecisions = 0;
+
+        // Scenarios Data - Brazil Focus
+        const scenarios = {
+            trump_pressure: {
+                name: { en: "The Trump Ultimatum", pt: "O Ultimato de Trump" },
+                badge: { en: "Risk #3: The Donroe Doctrine", pt: "Risco #3: Doutrina Donroe" },
+                role: { en: "Presidential Chief Advisor", pt: "Assessor-Chefe da Presidência" },
+                steps: [
+                    {
+                        title: { en: "The Demand", pt: "A Exigência" },
+                        situation: {
+                            en: "The US Trade Representative delivers an ultimatum: Brazil must grant American companies preferential access to its rare earth and lithium deposits, or face 50% tariffs on steel, aircraft parts, and agricultural exports. The Ambassador adds that 'cooperation on critical minerals' would make many problems disappear. The President wants options before tonight's press conference.",
+                            pt: "O Representante Comercial dos EUA entrega um ultimato: o Brasil deve conceder às empresas americanas acesso preferencial aos seus depósitos de terras raras e lítio, ou enfrentar tarifas de 50% sobre aço, peças de aeronaves e exportações agrícolas. O Embaixador acrescenta que 'cooperação em minerais críticos' faria muitos problemas desaparecerem. O Presidente quer opções antes da coletiva de imprensa desta noite."
+                        },
+                        choices: [
+                            {
+                                label: { en: "Option A: Accept the Deal", pt: "Opção A: Aceitar o Acordo" },
+                                text: {
+                                    en: "Recommend accepting preferential access for US companies in exchange for tariff relief. Brazil needs the American market more than sovereignty over mining rights.",
+                                    pt: "Recomendar aceitar o acesso preferencial para empresas americanas em troca de alívio tarifário. O Brasil precisa mais do mercado americano do que da soberania sobre direitos minerários."
+                                },
+                                consequence: "accept",
+                                points: 4,
+                                optimal: false
+                            },
+                            {
+                                label: { en: "Option B: Counter-Proposal", pt: "Opção B: Contraproposta" },
+                                text: {
+                                    en: "Recommend a counter-offer: joint ventures with technology transfer, Brazilian processing of minerals domestically, and a gradual tariff reduction schedule. Buy time to build alternatives.",
+                                    pt: "Recomendar uma contraproposta: joint ventures com transferência de tecnologia, processamento brasileiro de minerais domesticamente e um cronograma gradual de redução tarifária. Ganhar tempo para construir alternativas."
+                                },
+                                consequence: "counter",
+                                points: 10,
+                                optimal: true
+                            },
+                            {
+                                label: { en: "Option C: Defiant Rejection", pt: "Opção C: Rejeição Desafiadora" },
+                                text: {
+                                    en: "Recommend publicly rejecting US pressure as neo-colonialism. Rally Latin American solidarity. Announce expanded partnerships with China and the EU.",
+                                    pt: "Recomendar rejeitar publicamente a pressão dos EUA como neocolonialismo. Mobilizar a solidariedade latino-americana. Anunciar parcerias expandidas com a China e a UE."
+                                },
+                                consequence: "reject",
+                                points: 3,
+                                optimal: false
+                            }
+                        ]
+                    },
+                    {
+                        title: { en: "The Pressure Intensifies", pt: "A Pressão se Intensifica" },
+                        situation: {
+                            en: "${previousOutcome} Now the US Treasury has sanctioned a Supreme Court minister for 'corruption,' freezing his US assets. Everyone knows it's retaliation. The President is furious. Brasília is in crisis mode. Washington hints the sanctions could be 'reviewed' if Brazil shows 'flexibility.'",
+                            pt: "${previousOutcome} Agora o Tesouro americano sancionou um ministro do STF por 'corrupção,' congelando seus ativos nos EUA. Todos sabem que é retaliação. O Presidente está furioso. Brasília está em modo de crise. Washington sugere que as sanções podem ser 'revisadas' se o Brasil mostrar 'flexibilidade.'"
+                        },
+                        choices: [
+                            {
+                                label: { en: "Option A: Escalate", pt: "Opção A: Escalar" },
+                                text: {
+                                    en: "Recommend retaliatory measures: expel US diplomats, restrict American tech companies, fast-track the China minerals deal. Show Brazil won't be bullied.",
+                                    pt: "Recomendar medidas retaliatórias: expulsar diplomatas americanos, restringir empresas de tecnologia americanas, acelerar o acordo de minerais com a China. Mostrar que o Brasil não será intimidado."
+                                },
+                                consequence: "escalate",
+                                points: 3,
+                                optimal: false
+                            },
+                            {
+                                label: { en: "Option B: Strategic Patience", pt: "Opção B: Paciência Estratégica" },
+                                text: {
+                                    en: "Recommend quiet diplomacy. The sanctions are embarrassing but temporary. Keep negotiating behind the scenes. Don't give Trump the confrontation he wants before midterms.",
+                                    pt: "Recomendar diplomacia discreta. As sanções são embaraçosas mas temporárias. Continuar negociando nos bastidores. Não dar a Trump o confronto que ele quer antes das eleições de meio de mandato."
+                                },
+                                consequence: "patience",
+                                points: 10,
+                                optimal: true
+                            },
+                            {
+                                label: { en: "Option C: Public Compromise", pt: "Opção C: Compromisso Público" },
+                                text: {
+                                    en: "Recommend a face-saving deal: announce a 'strategic partnership' on critical minerals with vague terms. Give Trump a headline; preserve room to maneuver.",
+                                    pt: "Recomendar um acordo para salvar as aparências: anunciar uma 'parceria estratégica' em minerais críticos com termos vagos. Dar a Trump uma manchete; preservar espaço de manobra."
+                                },
+                                consequence: "compromise",
+                                points: 7,
+                                optimal: false
+                            }
+                        ]
+                    }
+                ],
+                consequences: {
+                    accept: {
+                        type: "negative",
+                        title: { en: "Sovereignty Traded", pt: "Soberania Negociada" },
+                        text: {
+                            en: "The deal goes through. American companies get preferential terms. Tariffs drop. But the opposition explodes with accusations of 'entreguismo.' Your government's poll numbers tank. And Washington is already asking for more.",
+                            pt: "O acordo é fechado. Empresas americanas obtêm termos preferenciais. As tarifas caem. Mas a oposição explode com acusações de 'entreguismo.' Os números do governo nas pesquisas despencam. E Washington já está pedindo mais."
+                        },
+                        expert: {
+                            en: "The Eurasia Group report notes that Trump's approach is 'personal and transactional'—accepting his first demand only invites more. 'Obedience will beget more extraction.'",
+                            pt: "O relatório do Eurasia Group observa que a abordagem de Trump é 'pessoal e transacional'—aceitar sua primeira demanda só convida mais. 'Obediência gerará mais extração.'"
+                        }
+                    },
+                    counter: {
+                        type: "positive",
+                        title: { en: "Negotiating Room", pt: "Espaço para Negociação" },
+                        text: {
+                            en: "Your counter-proposal buys time. Washington is frustrated but engaged. The technology transfer angle interests some US companies. You've shifted from ultimatum to negotiation—a win in itself.",
+                            pt: "Sua contraproposta ganha tempo. Washington está frustrado mas engajado. O ângulo da transferência de tecnologia interessa algumas empresas americanas. Você mudou de ultimato para negociação—uma vitória em si."
+                        },
+                        expert: {
+                            en: "The report notes Brazil is among countries that 'will defend themselves, hedge their bets, and find ways to muddle through.' Counter-proposals that offer something while preserving sovereignty are the smart play.",
+                            pt: "O relatório observa que o Brasil está entre os países que 'se defenderão, diversificarão suas apostas e encontrarão formas de se virar.' Contrapropostas que oferecem algo enquanto preservam a soberania são a jogada inteligente."
+                        }
+                    },
+                    reject: {
+                        type: "negative",
+                        title: { en: "Confrontation Backfires", pt: "Confronto Sai Pela Culatra" },
+                        text: {
+                            en: "Your defiant rejection makes headlines but backfires badly. Trump tweets attacks on Brazil's president personally. Tariffs hit immediately. Latin American 'solidarity' proves hollow—Argentina is already cutting its own deal. Markets tumble.",
+                            pt: "Sua rejeição desafiadora ganha manchetes mas sai muito mal. Trump tuíta ataques ao presidente brasileiro pessoalmente. As tarifas entram em vigor imediatamente. A 'solidariedade' latino-americana se mostra vazia—a Argentina já está fechando seu próprio acordo. Os mercados desabam."
+                        },
+                        expert: {
+                            en: "The report warns that Trump 'apparently views current E3 leadership as more adversarial than Russia.' Public defiance from a middle power invites punishment he's happy to deliver.",
+                            pt: "O relatório alerta que Trump 'aparentemente vê a atual liderança do E3 como mais adversária que a Rússia.' Desafio público de uma potência média convida punição que ele terá prazer em entregar."
+                        }
+                    },
+                    escalate: {
+                        type: "negative",
+                        title: { en: "Economic Warfare", pt: "Guerra Econômica" },
+                        text: {
+                            en: "Your retaliation triggers a full trade war. The US adds Brazil to its 'unfriendly nations' list. Investment flees. The real crashes. China offers support but wants exclusive mineral rights in return. You've traded one dependency for another.",
+                            pt: "Sua retaliação desencadeia uma guerra comercial total. Os EUA adicionam o Brasil à lista de 'nações hostis.' Investimentos fogem. O real despenca. A China oferece apoio mas quer direitos exclusivos de mineração em troca. Você trocou uma dependência por outra."
+                        },
+                        expert: {
+                            en: "The report notes that countries face a choice but 'this choice is geopolitical but less binary than choosing a defense partner.' Full escalation forces binary choices Brazil should avoid.",
+                            pt: "O relatório observa que os países enfrentam uma escolha, mas 'essa escolha é geopolítica mas menos binária do que escolher um parceiro de defesa.' Escalada total força escolhas binárias que o Brasil deveria evitar."
+                        }
+                    },
+                    patience: {
+                        type: "positive",
+                        title: { en: "Weathering the Storm", pt: "Resistindo à Tempestade" },
+                        text: {
+                            en: "Your patience pays off. The sanctions on the minister are quietly withdrawn after six weeks—they were embarrassing Trump more than Brazil. Negotiations resume on better terms. You've outlasted the tantrum.",
+                            pt: "Sua paciência compensa. As sanções ao ministro são discretamente retiradas após seis semanas—elas estavam envergonhando Trump mais do que o Brasil. As negociações são retomadas em melhores termos. Você sobreviveu ao chilique."
+                        },
+                        expert: {
+                            en: "The report mentions that sanctions on a 'Brazilian Supreme Court justice' were 'since withdrawn.' Strategic patience works when the other side's actions are more costly to them than to you.",
+                            pt: "O relatório menciona que sanções a um 'ministro do Supremo Tribunal Federal brasileiro' foram 'posteriormente retiradas.' Paciência estratégica funciona quando as ações do outro lado são mais custosas para eles do que para você."
+                        }
+                    },
+                    compromise: {
+                        type: "neutral",
+                        title: { en: "Ambiguous Outcome", pt: "Resultado Ambíguo" },
+                        text: {
+                            en: "Your vague 'strategic partnership' gives everyone a headline. Trump claims victory; Brazil claims sovereignty preserved. But the underlying tensions remain unresolved, ready to flare up again.",
+                            pt: "Sua vaga 'parceria estratégica' dá a todos uma manchete. Trump declara vitória; Brasil declara soberania preservada. Mas as tensões subjacentes permanecem não resolvidas, prontas para explodir novamente."
+                        },
+                        expert: {
+                            en: "Sometimes ambiguity is the best available outcome. The report notes many countries 'will defend themselves, hedge their bets, and find ways to muddle through as best they can.'",
+                            pt: "Às vezes a ambiguidade é o melhor resultado disponível. O relatório observa que muitos países 'se defenderão, diversificarão suas apostas e encontrarão formas de se virar da melhor forma possível.'"
+                        }
+                    }
+                },
+                takeaway: {
+                    en: "Brazil faces the 'Donroe Doctrine'—Trump's assertion of US primacy in the hemisphere through 'military pressure, economic coercion, selective alliance-building, and personal score-settling.' The key is strategic patience without either capitulation or confrontation.",
+                    pt: "O Brasil enfrenta a 'Doutrina Donroe'—a afirmação de Trump da primazia dos EUA no hemisfério através de 'pressão militar, coerção econômica, construção seletiva de alianças e acerto de contas pessoal.' A chave é paciência estratégica sem capitulação nem confronto."
+                }
+            },
+
+            china_balance: {
+                name: { en: "The China Dilemma", pt: "O Dilema da China" },
+                badge: { en: "Risk #7: China's Deflation Trap", pt: "Risco #7: Armadilha Deflacionária da China" },
+                role: { en: "Economic Policy Coordinator", pt: "Coordenador de Política Econômica" },
+                steps: [
+                    {
+                        title: { en: "The Soy Shock", pt: "O Choque da Soja" },
+                        situation: {
+                            en: "China's economy is in its tenth consecutive quarter of deflation. Demand for Brazilian soybeans, iron ore, and beef is falling sharply. Prices are collapsing. Meanwhile, Washington is offering tariff relief if Brazil restricts Chinese investment in 5G, ports, and electric vehicle manufacturing. The agribusiness lobby wants action. The tech sector is split.",
+                            pt: "A economia da China está em seu décimo trimestre consecutivo de deflação. A demanda por soja, minério de ferro e carne brasileiros está caindo drasticamente. Os preços estão desabando. Enquanto isso, Washington está oferecendo alívio tarifário se o Brasil restringir investimento chinês em 5G, portos e fabricação de veículos elétricos. O lobby do agronegócio quer ação. O setor de tecnologia está dividido."
+                        },
+                        choices: [
+                            {
+                                label: { en: "Option A: Pivot to Washington", pt: "Opção A: Virar para Washington" },
+                                text: {
+                                    en: "Recommend restricting Chinese investment in strategic sectors. Accept US terms. Diversify away from China dependence before it's too late.",
+                                    pt: "Recomendar restringir investimento chinês em setores estratégicos. Aceitar os termos dos EUA. Diversificar para longe da dependência da China antes que seja tarde demais."
+                                },
+                                consequence: "pivot_us",
+                                points: 4,
+                                optimal: false
+                            },
+                            {
+                                label: { en: "Option B: Balanced Hedging", pt: "Opção B: Hedge Equilibrado" },
+                                text: {
+                                    en: "Recommend maintaining ties with both powers. Negotiate with Washington without breaking with Beijing. Seek alternative markets in India, EU, and Gulf states. Don't pick sides.",
+                                    pt: "Recomendar manter laços com ambas as potências. Negociar com Washington sem romper com Pequim. Buscar mercados alternativos na Índia, UE e países do Golfo. Não escolher lados."
+                                },
+                                consequence: "balanced",
+                                points: 10,
+                                optimal: true
+                            },
+                            {
+                                label: { en: "Option C: Double Down on China", pt: "Opção C: Dobrar a Aposta na China" },
+                                text: {
+                                    en: "Recommend deepening ties with Beijing. China's deflation is temporary; it remains Brazil's largest market. Accept more Chinese investment to offset US pressure.",
+                                    pt: "Recomendar aprofundar laços com Pequim. A deflação da China é temporária; ela continua sendo o maior mercado do Brasil. Aceitar mais investimento chinês para compensar a pressão dos EUA."
+                                },
+                                consequence: "double_china",
+                                points: 4,
+                                optimal: false
+                            }
+                        ]
+                    },
+                    {
+                        title: { en: "The EV Dilemma", pt: "O Dilema dos EVs" },
+                        situation: {
+                            en: "${previousOutcome} Now BYD wants to build a massive EV factory in Bahia, promising 10,000 jobs and technology transfer. Washington warns this would make Brazil complicit in China's 'unfair trade practices' and threatens to exclude Brazilian auto parts from the US market. Governor ACM Neto is lobbying hard for the jobs.",
+                            pt: "${previousOutcome} Agora a BYD quer construir uma enorme fábrica de EVs na Bahia, prometendo 10.000 empregos e transferência de tecnologia. Washington alerta que isso tornaria o Brasil cúmplice das 'práticas comerciais desleais' da China e ameaça excluir autopeças brasileiras do mercado dos EUA. O Governador ACM Neto está pressionando muito pelos empregos."
+                        },
+                        choices: [
+                            {
+                                label: { en: "Option A: Block the Factory", pt: "Opção A: Bloquear a Fábrica" },
+                                text: {
+                                    en: "Recommend blocking or delaying the BYD investment on 'national security' grounds. Preserve the US relationship. The jobs can come from somewhere else.",
+                                    pt: "Recomendar bloquear ou atrasar o investimento da BYD por motivos de 'segurança nacional.' Preservar o relacionamento com os EUA. Os empregos podem vir de outro lugar."
+                                },
+                                consequence: "block",
+                                points: 4,
+                                optimal: false
+                            },
+                            {
+                                label: { en: "Option B: Conditional Approval", pt: "Opção B: Aprovação Condicional" },
+                                text: {
+                                    en: "Recommend approving with conditions: local content requirements, data localization, technology transfer guarantees. Frame it as industrial policy, not geopolitics.",
+                                    pt: "Recomendar aprovar com condições: requisitos de conteúdo local, localização de dados, garantias de transferência de tecnologia. Enquadrar como política industrial, não geopolítica."
+                                },
+                                consequence: "conditional",
+                                points: 10,
+                                optimal: true
+                            },
+                            {
+                                label: { en: "Option C: Full Welcome", pt: "Opção C: Boas-Vindas Totais" },
+                                text: {
+                                    en: "Recommend welcoming BYD with open arms and minimal conditions. Brazil needs the investment and jobs. Let Washington complain.",
+                                    pt: "Recomendar receber a BYD de braços abertos e condições mínimas. O Brasil precisa do investimento e dos empregos. Deixe Washington reclamar."
+                                },
+                                consequence: "welcome",
+                                points: 5,
+                                optimal: false
+                            }
+                        ]
+                    }
+                ],
+                consequences: {
+                    pivot_us: {
+                        type: "negative",
+                        title: { en: "Beijing Retaliates", pt: "Pequim Retalia" },
+                        text: {
+                            en: "Your pivot angers Beijing. China redirects soybean purchases to Argentina and the US (!). Brazilian farmers are devastated. The promised US market access comes with strings attached. You've traded a major partner for vague promises.",
+                            pt: "Sua virada irrita Pequim. A China redireciona compras de soja para Argentina e EUA (!). Agricultores brasileiros são devastados. O prometido acesso ao mercado dos EUA vem com condições. Você trocou um grande parceiro por promessas vagas."
+                        },
+                        expert: {
+                            en: "The report notes that 'Beijing can redirect soybean purchases from American farmers to Argentine ones almost overnight.' The same applies in reverse—antagonizing your largest trading partner has immediate costs.",
+                            pt: "O relatório observa que 'Pequim pode redirecionar compras de soja de agricultores americanos para argentinos quase da noite para o dia.' O mesmo se aplica ao contrário—antagonizar seu maior parceiro comercial tem custos imediatos."
+                        }
+                    },
+                    balanced: {
+                        type: "positive",
+                        title: { en: "Strategic Autonomy", pt: "Autonomia Estratégica" },
+                        text: {
+                            en: "Your balanced approach preserves options. Neither Washington nor Beijing is happy, but neither retaliates. New trade agreements with India and the EU begin to diversify your export base. Brazil maintains room to maneuver.",
+                            pt: "Sua abordagem equilibrada preserva opções. Nem Washington nem Pequim estão felizes, mas nenhum retalia. Novos acordos comerciais com Índia e UE começam a diversificar sua base de exportação. O Brasil mantém espaço de manobra."
+                        },
+                        expert: {
+                            en: "The report describes countries that 'will defend themselves, hedge their bets, and find ways to muddle through.' For middle powers like Brazil, avoiding binary choices is itself a strategic victory.",
+                            pt: "O relatório descreve países que 'se defenderão, diversificarão suas apostas e encontrarão formas de se virar.' Para potências médias como o Brasil, evitar escolhas binárias é em si uma vitória estratégica."
+                        }
+                    },
+                    double_china: {
+                        type: "neutral",
+                        title: { en: "Deeper Dependency", pt: "Dependência Mais Profunda" },
+                        text: {
+                            en: "Your bet on China brings short-term relief as Beijing shows appreciation. But China's deflation deepens, and so does your exposure. When Chinese demand drops further, Brazil has nowhere else to turn. You've doubled down on a declining market.",
+                            pt: "Sua aposta na China traz alívio de curto prazo enquanto Pequim demonstra apreciação. Mas a deflação da China se aprofunda, e sua exposição também. Quando a demanda chinesa cai ainda mais, o Brasil não tem para onde se virar. Você dobrou a aposta em um mercado em declínio."
+                        },
+                        expert: {
+                            en: "The report warns that China's deflation 'will deepen in 2026, and Beijing won't do anything to stop it.' Doubling down on a deflationary trading partner means absorbing their economic pain.",
+                            pt: "O relatório alerta que a deflação da China 'se aprofundará em 2026, e Pequim não fará nada para pará-la.' Dobrar a aposta em um parceiro comercial deflacionário significa absorver sua dor econômica."
+                        }
+                    },
+                    block: {
+                        type: "negative",
+                        title: { en: "Jobs Lost, Little Gained", pt: "Empregos Perdidos, Pouco Ganho" },
+                        text: {
+                            en: "BYD moves the factory to Mexico instead. 10,000 Brazilian jobs vanish. The US offers tepid praise but no concrete benefits. Governor ACM Neto publicly blames Brasília for killing Bahia's future.",
+                            pt: "A BYD muda a fábrica para o México. 10.000 empregos brasileiros desaparecem. Os EUA oferecem elogios tépidos mas nenhum benefício concreto. O Governador ACM Neto culpa publicamente Brasília por matar o futuro da Bahia."
+                        },
+                        expert: {
+                            en: "The report notes China leads in 'EVs and drones built on these components' and its 'value proposition is especially enticing for emerging markets.' Blocking Chinese EV investment means missing the electrification wave.",
+                            pt: "O relatório observa que a China lidera em 'EVs e drones construídos com esses componentes' e sua 'proposta de valor é especialmente atraente para mercados emergentes.' Bloquear investimento chinês em EVs significa perder a onda de eletrificação."
+                        }
+                    },
+                    conditional: {
+                        type: "positive",
+                        title: { en: "Industrial Policy Win", pt: "Vitória de Política Industrial" },
+                        text: {
+                            en: "Your conditional approach threads the needle. BYD accepts the terms—they want the market. Washington grumbles but can't object to 'normal industrial policy.' Brazil gets jobs AND technology transfer AND preserves both relationships.",
+                            pt: "Sua abordagem condicional acerta o alvo. A BYD aceita os termos—eles querem o mercado. Washington reclama mas não pode objetar a 'política industrial normal.' O Brasil ganha empregos E transferência de tecnologia E preserva ambos os relacionamentos."
+                        },
+                        expert: {
+                            en: "The report notes that adopting Chinese tech 'is (geo)political but less binary than choosing a defense partner, making it easier to drift toward Beijing without a single dramatic break with Washington.' Smart conditions reduce the political cost.",
+                            pt: "O relatório observa que adotar tecnologia chinesa 'é (geo)político mas menos binário do que escolher um parceiro de defesa, tornando mais fácil derivar em direção a Pequim sem uma ruptura dramática única com Washington.' Condições inteligentes reduzem o custo político."
+                        }
+                    },
+                    welcome: {
+                        type: "neutral",
+                        title: { en: "Mixed Results", pt: "Resultados Mistos" },
+                        text: {
+                            en: "The factory opens with great fanfare. Jobs materialize. But without conditions, the technology stays with BYD. Brazilian suppliers are cut out. And Washington follows through on auto parts restrictions, hurting existing industry.",
+                            pt: "A fábrica abre com grande fanfarra. Os empregos se materializam. Mas sem condições, a tecnologia fica com a BYD. Fornecedores brasileiros são cortados. E Washington cumpre as restrições de autopeças, prejudicando a indústria existente."
+                        },
+                        expert: {
+                            en: "The report warns of 'tradeoffs to adopting the Chinese stack, including cybersecurity risks and fewer opportunities for other countries to build their own electrotech industries.' Unconditional welcome maximizes these downsides.",
+                            pt: "O relatório alerta sobre 'compensações ao adotar a stack chinesa, incluindo riscos de cibersegurança e menos oportunidades para outros países construírem suas próprias indústrias de eletrotecnologia.' Boas-vindas incondicionais maximizam essas desvantagens."
+                        }
+                    }
+                },
+                takeaway: {
+                    en: "China is Brazil's largest trading partner but faces a 'deflation trap' that threatens demand for Brazilian exports. The US pressures decoupling. Brazil's best strategy is 'hedging bets' and 'muddling through'—preserving both relationships while quietly diversifying.",
+                    pt: "A China é o maior parceiro comercial do Brasil mas enfrenta uma 'armadilha deflacionária' que ameaça a demanda por exportações brasileiras. Os EUA pressionam pelo desacoplamento. A melhor estratégia do Brasil é 'diversificar apostas' e 'se virar'—preservando ambos os relacionamentos enquanto discretamente diversifica."
+                }
+            },
+
+            venezuela_crisis: {
+                name: { en: "Venezuela Next Door", pt: "Venezuela ao Lado" },
+                badge: { en: "Risk #3: The Donroe Doctrine", pt: "Risco #3: Doutrina Donroe" },
+                role: { en: "Foreign Policy Advisor", pt: "Assessor de Política Externa" },
+                steps: [
+                    {
+                        title: { en: "Maduro Falls", pt: "Maduro Cai" },
+                        situation: {
+                            en: "US Special Forces have captured Maduro in a dramatic raid. Venezuela is in chaos. The regime's power structure—Cabello, Padrino Lopez, the Rodríguez siblings—remains intact but leaderless. Armed colectivos control parts of Caracas. Refugees are surging toward Roraima. Washington wants Brazil to recognize an opposition government immediately and provide logistical support.",
+                            pt: "Forças Especiais dos EUA capturaram Maduro em uma operação dramática. A Venezuela está no caos. A estrutura de poder do regime—Cabello, Padrino Lopez, os irmãos Rodríguez—permanece intacta mas sem líder. Colectivos armados controlam partes de Caracas. Refugiados estão avançando para Roraima. Washington quer que o Brasil reconheça imediatamente um governo de oposição e forneça apoio logístico."
+                        },
+                        choices: [
+                            {
+                                label: { en: "Option A: Full Support", pt: "Opção A: Apoio Total" },
+                                text: {
+                                    en: "Recommend immediately recognizing the opposition, opening borders for humanitarian aid, and offering Brazilian military support for stabilization. Stand with Washington.",
+                                    pt: "Recomendar reconhecer imediatamente a oposição, abrir fronteiras para ajuda humanitária e oferecer apoio militar brasileiro para estabilização. Ficar ao lado de Washington."
+                                },
+                                consequence: "full_support",
+                                points: 5,
+                                optimal: false
+                            },
+                            {
+                                label: { en: "Option B: Cautious Engagement", pt: "Opção B: Engajamento Cauteloso" },
+                                text: {
+                                    en: "Recommend humanitarian assistance without political recognition yet. Call for inclusive dialogue including regime figures willing to negotiate. Avoid being seen as Washington's proxy.",
+                                    pt: "Recomendar assistência humanitária sem reconhecimento político ainda. Pedir diálogo inclusivo incluindo figuras do regime dispostas a negociar. Evitar ser visto como proxy de Washington."
+                                },
+                                consequence: "cautious",
+                                points: 10,
+                                optimal: true
+                            },
+                            {
+                                label: { en: "Option C: Non-Interference", pt: "Opção C: Não-Interferência" },
+                                text: {
+                                    en: "Recommend staying out entirely. This is Venezuela's internal affair. The US created this mess; let them handle it. Focus on border security and refugee management.",
+                                    pt: "Recomendar ficar totalmente fora. Este é um assunto interno da Venezuela. Os EUA criaram essa bagunça; deixe-os resolver. Focar em segurança de fronteira e gestão de refugiados."
+                                },
+                                consequence: "non_interference",
+                                points: 4,
+                                optimal: false
+                            }
+                        ]
+                    },
+                    {
+                        title: { en: "The Refugee Surge", pt: "A Onda de Refugiados" },
+                        situation: {
+                            en: "${previousOutcome} Three months later, 200,000 new Venezuelan refugees have arrived in Brazil. Roraima's services are overwhelmed. ELN guerrillas are reportedly crossing the border. The opposition government in Caracas is fragile, with armed groups controlling territory. Washington is pressuring Brazil to do more—and threatening to redirect refugees north if Brazil doesn't.",
+                            pt: "${previousOutcome} Três meses depois, 200.000 novos refugiados venezuelanos chegaram ao Brasil. Os serviços de Roraima estão sobrecarregados. Guerrilheiros do ELN estão supostamente cruzando a fronteira. O governo de oposição em Caracas é frágil, com grupos armados controlando território. Washington está pressionando o Brasil a fazer mais—e ameaçando redirecionar refugiados para o norte se o Brasil não fizer."
+                        },
+                        choices: [
+                            {
+                                label: { en: "Option A: Close the Border", pt: "Opção A: Fechar a Fronteira" },
+                                text: {
+                                    en: "Recommend restricting border crossings and deploying military to prevent uncontrolled migration. Brazil can't absorb unlimited refugees. Let Colombia and the US share the burden.",
+                                    pt: "Recomendar restringir travessias de fronteira e mobilizar militares para prevenir migração descontrolada. O Brasil não pode absorver refugiados ilimitados. Deixe Colômbia e EUA compartilharem o fardo."
+                                },
+                                consequence: "close_border",
+                                points: 4,
+                                optimal: false
+                            },
+                            {
+                                label: { en: "Option B: Regional Solution", pt: "Opção B: Solução Regional" },
+                                text: {
+                                    en: "Recommend leading a regional coalition—Colombia, Peru, Ecuador, Brazil—to share refugee burden and coordinate support for Venezuela's transition. Position Brazil as the responsible leader.",
+                                    pt: "Recomendar liderar uma coalizão regional—Colômbia, Peru, Equador, Brasil—para compartilhar o fardo de refugiados e coordenar apoio para a transição da Venezuela. Posicionar o Brasil como líder responsável."
+                                },
+                                consequence: "regional",
+                                points: 10,
+                                optimal: true
+                            },
+                            {
+                                label: { en: "Option C: US Partnership", pt: "Opção C: Parceria com EUA" },
+                                text: {
+                                    en: "Recommend accepting Washington's request for full partnership. Request US funding and resources for refugee management. Become the anchor for US policy in the region.",
+                                    pt: "Recomendar aceitar o pedido de Washington por parceria total. Solicitar financiamento e recursos dos EUA para gestão de refugiados. Tornar-se a âncora para a política dos EUA na região."
+                                },
+                                consequence: "us_partnership",
+                                points: 5,
+                                optimal: false
+                            }
+                        ]
+                    }
+                ],
+                consequences: {
+                    full_support: {
+                        type: "neutral",
+                        title: { en: "Caught in the Middle", pt: "Pego no Meio" },
+                        text: {
+                            en: "Your full support pleases Washington but makes Brazil a target for regime loyalists and armed groups. A Brazilian diplomat is kidnapped. Nationalist sentiment in Venezuela turns against 'foreign intervention.' The opposition government you recognized struggles to establish control.",
+                            pt: "Seu apoio total agrada Washington mas torna o Brasil um alvo para legalistas do regime e grupos armados. Um diplomata brasileiro é sequestrado. O sentimento nacionalista na Venezuela se volta contra a 'intervenção estrangeira.' O governo de oposição que você reconheceu luta para estabelecer controle."
+                        },
+                        expert: {
+                            en: "The report warns that 'the raid itself could harden the remaining regime's resistance and stir nationalist resentment even among Venezuelans who hated Maduro.' Full alignment with US intervention carries blowback risks.",
+                            pt: "O relatório alerta que 'a própria operação poderia endurecer a resistência do regime remanescente e despertar ressentimento nacionalista mesmo entre venezuelanos que odiavam Maduro.' Alinhamento total com intervenção dos EUA traz riscos de retaliação."
+                        }
+                    },
+                    cautious: {
+                        type: "positive",
+                        title: { en: "Honest Broker", pt: "Mediador Honesto" },
+                        text: {
+                            en: "Your cautious approach positions Brazil as a credible mediator. Regime figures willing to negotiate see you as a safe channel. The transition is messy but you're helping shape it. Regional influence grows.",
+                            pt: "Sua abordagem cautelosa posiciona o Brasil como mediador confiável. Figuras do regime dispostas a negociar o veem como canal seguro. A transição é confusa mas você está ajudando a moldá-la. A influência regional cresce."
+                        },
+                        expert: {
+                            en: "The report notes that 'the transition will largely be Venezuela's to manage—or mismanage.' A cautious external approach that facilitates dialogue without imposing outcomes gives the best chance for stability.",
+                            pt: "O relatório observa que 'a transição será em grande parte da Venezuela para gerenciar—ou mal gerenciar.' Uma abordagem externa cautelosa que facilita o diálogo sem impor resultados dá a melhor chance de estabilidade."
+                        }
+                    },
+                    non_interference: {
+                        type: "negative",
+                        title: { en: "Crisis Deepens", pt: "Crise se Aprofunda" },
+                        text: {
+                            en: "Your non-interference stance leaves a vacuum. Armed groups consolidate territory. The humanitarian crisis worsens. Refugees come anyway, now through dangerous informal crossings. Brazil is blamed for inaction while paying the costs anyway.",
+                            pt: "Sua postura de não-interferência deixa um vácuo. Grupos armados consolidam território. A crise humanitária piora. Os refugiados vêm de qualquer forma, agora por travessias informais perigosas. O Brasil é culpado pela inação enquanto paga os custos de qualquer forma."
+                        },
+                        expert: {
+                            en: "The report warns of 'armed groups—including ELN guerrillas, armed colectivos, and criminal networks embedded in illicit mining and trafficking—will see opportunity in any resulting chaos.' Non-interference doesn't insulate Brazil from the consequences.",
+                            pt: "O relatório alerta sobre 'grupos armados—incluindo guerrilheiros do ELN, colectivos armados e redes criminosas envolvidas em mineração ilícita e tráfico—verão oportunidade em qualquer caos resultante.' Não-interferência não isola o Brasil das consequências."
+                        }
+                    },
+                    close_border: {
+                        type: "negative",
+                        title: { en: "Humanitarian Crisis", pt: "Crise Humanitária" },
+                        text: {
+                            en: "Closing the border creates horrific scenes: families separated, desperate crossings, deaths. International condemnation follows. The refugees come anyway through informal routes, now harder to track and support. Brazil's reputation suffers.",
+                            pt: "Fechar a fronteira cria cenas horríveis: famílias separadas, travessias desesperadas, mortes. Condenação internacional segue. Os refugiados vêm de qualquer forma por rotas informais, agora mais difíceis de rastrear e apoiar. A reputação do Brasil sofre."
+                        },
+                        expert: {
+                            en: "History shows that 'aggressive crackdowns tend to displace illicit networks rather than dismantle them.' The same applies to refugees—border closure doesn't stop flows, just makes them more dangerous and less manageable.",
+                            pt: "A história mostra que 'repressões agressivas tendem a deslocar redes ilícitas em vez de desmantelá-las.' O mesmo se aplica a refugiados—fechamento de fronteira não para fluxos, apenas os torna mais perigosos e menos gerenciáveis."
+                        }
+                    },
+                    regional: {
+                        type: "positive",
+                        title: { en: "Leadership Recognized", pt: "Liderança Reconhecida" },
+                        text: {
+                            en: "Your regional coalition succeeds in sharing the burden and coordinating policy. Brazil is recognized as the responsible regional leader. The EU provides support. Even Washington grudgingly accepts Brazil's independent approach is working better than unilateralism.",
+                            pt: "Sua coalizão regional tem sucesso em compartilhar o fardo e coordenar políticas. O Brasil é reconhecido como líder regional responsável. A UE fornece apoio. Até Washington aceita relutantemente que a abordagem independente do Brasil está funcionando melhor que o unilateralismo."
+                        },
+                        expert: {
+                            en: "The report notes that 'disruption of entrenched trafficking, illicit mining, and smuggling systems would redirect criminal groups' to weaker states. Regional coordination prevents this displacement and builds durable solutions.",
+                            pt: "O relatório observa que 'a interrupção de sistemas estabelecidos de tráfico, mineração ilícita e contrabando redirecionaria grupos criminosos' para estados mais fracos. Coordenação regional previne esse deslocamento e constrói soluções duráveis."
+                        }
+                    },
+                    us_partnership: {
+                        type: "neutral",
+                        title: { en: "Junior Partner", pt: "Parceiro Júnior" },
+                        text: {
+                            en: "US resources flow in, helping manage the immediate crisis. But Brazil is now seen as Washington's proxy in the region. Future diplomatic flexibility is constrained. When US priorities shift, the support may disappear.",
+                            pt: "Recursos dos EUA fluem, ajudando a gerenciar a crise imediata. Mas o Brasil agora é visto como proxy de Washington na região. Flexibilidade diplomática futura é restringida. Quando as prioridades dos EUA mudarem, o apoio pode desaparecer."
+                        },
+                        expert: {
+                            en: "The report warns that 'Trump wants to go in hard, declare victory quickly, and get out.' Dependence on US support means vulnerability when American attention shifts elsewhere.",
+                            pt: "O relatório alerta que 'Trump quer entrar pesado, declarar vitória rapidamente e sair.' Dependência do apoio dos EUA significa vulnerabilidade quando a atenção americana se volta para outro lugar."
+                        }
+                    }
+                },
+                takeaway: {
+                    en: "Venezuela's collapse creates both crisis and opportunity for Brazil. The Donroe Doctrine means US intervention will be aggressive but unsustained. Brazil's best role is as a 'cautious regional leader'—managing the immediate humanitarian crisis while avoiding becoming Washington's proxy.",
+                    pt: "O colapso da Venezuela cria tanto crise quanto oportunidade para o Brasil. A Doutrina Donroe significa que a intervenção dos EUA será agressiva mas não sustentada. O melhor papel do Brasil é como 'líder regional cauteloso'—gerenciando a crise humanitária imediata enquanto evita se tornar proxy de Washington."
+                }
+            }
+        };
+
+        // Language toggle
+        function setLang(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.textContent.toLowerCase() === lang);
+            });
+            document.querySelectorAll('[data-' + lang + ']').forEach(el => {
+                el.textContent = el.getAttribute('data-' + lang);
+            });
+            // Re-render current screen if in game
+            if (currentScenario && document.getElementById('game-screen').classList.contains('active')) {
+                renderStep();
+            }
+        }
+
+        // Helper to get localized text
+        function t(obj) {
+            if (typeof obj === 'string') return obj;
+            return obj[currentLang] || obj['en'] || obj;
+        }
+
+        // Start a scenario
+        function startScenario(scenarioId) {
+            currentScenario = scenarios[scenarioId];
+            currentStep = 0;
+            score = 0;
+            optimalChoices = 0;
+            totalDecisions = 0;
+
+            document.getElementById('role-display').textContent = t(currentScenario.role);
+            showScreen('game-screen');
+            renderStep();
+        }
+
+        // Render current step
+        function renderStep() {
+            const step = currentScenario.steps[currentStep];
+            const progress = ((currentStep) / currentScenario.steps.length) * 100;
+
+            document.getElementById('progress-fill').style.width = progress + '%';
+            document.getElementById('scenario-badge').textContent = t(currentScenario.badge);
+            document.getElementById('situation-title').textContent = t(step.title);
+
+            let situationText = t(step.situation);
+            if (situationText.includes('${previousOutcome}')) {
+                situationText = situationText.replace('${previousOutcome}', window.lastOutcomeText || '');
+            }
+            document.getElementById('situation-text').textContent = situationText;
+
+            const choicesContainer = document.getElementById('choices-container');
+            choicesContainer.innerHTML = '';
+
+            // Shuffle choices to randomize correct answer position
+            const shuffledChoices = [...step.choices]
+                .map((choice, originalIndex) => ({ choice, originalIndex }))
+                .sort(() => Math.random() - 0.5);
+
+            shuffledChoices.forEach(({ choice, originalIndex }, displayIndex) => {
+                const btn = document.createElement('button');
+                btn.className = 'choice-btn';
+                const optionLetter = String.fromCharCode(65 + displayIndex); // A, B, C
+                const labelText = t(choice.label).replace(/^(Option|Opção) [A-C]:?/i, `${currentLang === 'pt' ? 'Opção' : 'Option'} ${optionLetter}:`);
+                btn.innerHTML = `<span class="choice-label">${labelText}</span>${t(choice.text)}`;
+                btn.onclick = () => makeChoice(originalIndex);
+                choicesContainer.appendChild(btn);
+            });
+        }
+
+        // Handle choice
+        function makeChoice(choiceIndex) {
+            const step = currentScenario.steps[currentStep];
+            const choice = step.choices[choiceIndex];
+            const consequence = currentScenario.consequences[choice.consequence];
+
+            score += choice.points;
+            totalDecisions++;
+            if (choice.optimal) optimalChoices++;
+
+            const consequenceText = t(consequence.text);
+            window.lastOutcomeText = consequenceText.split('.')[0] + '.';
+
+            document.getElementById('consequence-badge').textContent = t(currentScenario.badge);
+            document.getElementById('consequence-title').textContent = t(consequence.title);
+            document.getElementById('consequence-text').textContent = consequenceText;
+            document.getElementById('expert-insight').textContent = t(consequence.expert);
+
+            const box = document.getElementById('consequence-box');
+            box.className = 'consequence-box ' + consequence.type;
+
+            const continueBtn = document.getElementById('continue-btn');
+            continueBtn.textContent = currentStep < currentScenario.steps.length - 1
+                ? (currentLang === 'pt' ? 'Continuar' : 'Continue')
+                : (currentLang === 'pt' ? 'Ver Resultados' : 'See Results');
+
+            showScreen('consequence-screen');
+        }
+
+        // Continue to next step or results
+        function continueGame() {
+            currentStep++;
+            if (currentStep < currentScenario.steps.length) {
+                showScreen('game-screen');
+                renderStep();
+            } else {
+                showResults();
+            }
+        }
+
+        // Show results
+        function showResults() {
+            const maxScore = currentScenario.steps.length * 10;
+            const percentage = Math.round((score / maxScore) * 100);
+
+            document.getElementById('final-score').textContent = percentage + '%';
+            document.getElementById('decisions-made').textContent = totalDecisions;
+            document.getElementById('optimal-choices').textContent = optimalChoices + '/' + totalDecisions;
+            document.getElementById('scenario-takeaway').textContent = t(currentScenario.takeaway);
+
+            document.getElementById('progress-fill').style.width = '100%';
+
+            showScreen('results-screen');
+        }
+
+        // Restart current scenario
+        function restartScenario() {
+            currentStep = 0;
+            score = 0;
+            optimalChoices = 0;
+            totalDecisions = 0;
+            showScreen('game-screen');
+            renderStep();
+        }
+
+        // Back to menu
+        function backToMenu() {
+            currentScenario = null;
+            showScreen('start-screen');
+        }
+
+        // Screen management
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+    </script>
+</body>
+</html>

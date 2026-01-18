@@ -1,0 +1,14 @@
+# Source PDF (copyrighted material)
+pardot_download.pdf
+
+# Saved webpages
+Eurasia Group*
+*.html_files/
+
+# Windows
+nul
+Thumbs.db
+desktop.ini
+
+# macOS
+.DS_Store
