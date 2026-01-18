@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,7 +32,7 @@
         header {
             text-align: center;
             padding: 30px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             margin-bottom: 30px;
         }
 
@@ -83,9 +84,17 @@
             border-radius: 50%;
         }
 
-        .flag-green { background: #009c3b; }
-        .flag-yellow { background: #ffdf00; }
-        .flag-blue { background: #002776; }
+        .flag-green {
+            background: #009c3b;
+        }
+
+        .flag-yellow {
+            background: #ffdf00;
+        }
+
+        .flag-blue {
+            background: #002776;
+        }
 
         .game-container {
             flex: 1;
@@ -103,16 +112,23 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .card {
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 15px;
             padding: 30px;
             margin-bottom: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
         }
 
@@ -144,7 +160,7 @@
             color: #ccc;
             margin-bottom: 25px;
             padding: 20px;
-            background: rgba(0,0,0,0.2);
+            background: rgba(0, 0, 0, 0.2);
             border-radius: 10px;
             border-left: 4px solid #ffd700;
         }
@@ -156,8 +172,8 @@
         }
 
         .choice-btn {
-            background: rgba(255,255,255,0.08);
-            border: 2px solid rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(255, 255, 255, 0.15);
             color: #fff;
             padding: 20px 25px;
             border-radius: 10px;
@@ -236,7 +252,7 @@
         }
 
         .learn-more {
-            background: rgba(0,0,0,0.3);
+            background: rgba(0, 0, 0, 0.3);
             padding: 20px;
             border-radius: 10px;
             margin-top: 20px;
@@ -288,7 +304,7 @@
         .progress-bar {
             width: 100%;
             height: 6px;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 3px;
             margin-bottom: 30px;
             overflow: hidden;
@@ -309,8 +325,8 @@
         }
 
         .scenario-card {
-            background: rgba(255,255,255,0.05);
-            border: 2px solid rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
             border-radius: 15px;
             padding: 25px;
             cursor: pointer;
@@ -372,8 +388,16 @@
         }
 
         @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
+
+            0%,
+            50% {
+                opacity: 1;
+            }
+
+            51%,
+            100% {
+                opacity: 0;
+            }
         }
 
         /* Choice cards with icons */
@@ -410,21 +434,54 @@
 
         /* Consequence animations */
         @keyframes pulsePositive {
-            0% { box-shadow: 0 0 0 0 rgba(0, 179, 71, 0.4); }
-            70% { box-shadow: 0 0 0 20px rgba(0, 179, 71, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 179, 71, 0); }
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 179, 71, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 20px rgba(0, 179, 71, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 179, 71, 0);
+            }
         }
 
         @keyframes pulseNegative {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-            20%, 40%, 60%, 80% { transform: translateX(5px); }
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            10%,
+            30%,
+            50%,
+            70%,
+            90% {
+                transform: translateX(-5px);
+            }
+
+            20%,
+            40%,
+            60%,
+            80% {
+                transform: translateX(5px);
+            }
         }
 
         @keyframes pulseNeutral {
-            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); }
-            70% { box-shadow: 0 0 0 15px rgba(255, 215, 0, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(255, 215, 0, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);
+            }
         }
 
         .consequence-box.positive {
@@ -447,9 +504,19 @@
 
         /* Score animation */
         @keyframes scorePopIn {
-            0% { transform: scale(0.5); opacity: 0; }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); opacity: 1; }
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         .score-number {
@@ -553,7 +620,7 @@
             padding: 25px 20px;
             color: #888;
             font-size: 0.85em;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             margin-top: 30px;
             line-height: 1.6;
         }
@@ -581,8 +648,8 @@
         }
 
         .lang-btn {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: #888;
             padding: 5px 12px;
             border-radius: 5px;
@@ -600,20 +667,55 @@
         .lang-btn:hover {
             border-color: #00b347;
         }
+
+        /* Sound controls */
+        .sound-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.5em;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sound-toggle:hover {
+            background: rgba(0, 179, 71, 0.3);
+            border-color: #00b347;
+            transform: scale(1.1);
+        }
+
+        .sound-toggle.muted {
+            opacity: 0.5;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
+        <button class="sound-toggle" id="sound-toggle" onclick="toggleSound()" title="Toggle Sound">🔊</button>
+
         <div class="lang-toggle">
             <button class="lang-btn active" onclick="setLang('pt')">PT</button>
             <button class="lang-btn" onclick="setLang('en')">EN</button>
         </div>
 
         <header>
-            <h1><span data-en="Crisis Room " data-pt="Sala de Crise ">Sala de Crise </span><span>Brasil</span> <span class="year">2026</span></h1>
-            <p data-en="A Geopolitical Decision Simulator" data-pt="Simulador de Decisões Geopolíticas">Simulador de Decisões Geopolíticas</p>
+            <h1><span data-en="Crisis Room " data-pt="Sala de Crise ">Sala de Crise </span><span>Brasil</span> <span
+                    class="year">2026</span></h1>
+            <p data-en="A Geopolitical Decision Simulator" data-pt="Simulador de Decisões Geopolíticas">Simulador de
+                Decisões Geopolíticas</p>
             <div class="subtitle">
-                <span data-en="Based on Eurasia Group Top Risks 2026" data-pt="Baseado no Eurasia Group Top Risks 2026">Baseado no Eurasia Group Top Risks 2026</span>
+                <span data-en="Based on Eurasia Group Top Risks 2026"
+                    data-pt="Baseado no Eurasia Group Top Risks 2026">Baseado no Eurasia Group Top Risks 2026</span>
                 <div class="flag-colors">
                     <span class="flag-green"></span>
                     <span class="flag-yellow"></span>
@@ -627,22 +729,33 @@
             <div id="start-screen" class="screen active">
                 <div class="card">
                     <h2 data-en="Welcome, Advisor" data-pt="Bem-vindo, Analista">Bem-vindo, Analista</h2>
-                    <p data-en="The year is 2026. Brazil faces unprecedented geopolitical pressures. The Trump administration is reshaping hemispheric relations. China's economic troubles ripple through commodity markets—but Chinese investment in AI and green energy is surging. AI-powered disinformation threatens October's elections. Data centers demand massive energy. The future is being decided now."
-                       data-pt="Estamos em 2026. O Brasil enfrenta pressões geopolíticas sem precedentes. O governo Trump está remodelando as relações hemisféricas. Os problemas econômicos da China afetam os mercados de commodities—mas o investimento chinês em IA e energia verde está disparando. Desinformação alimentada por IA ameaça as eleições de outubro. Data centers demandam energia massiva. O futuro está sendo decidido agora.">
-                       Estamos em 2026. O Brasil enfrenta pressões geopolíticas sem precedentes. O governo Trump está remodelando as relações hemisféricas. Os problemas econômicos da China afetam os mercados de commodities—mas o investimento chinês em IA e energia verde está disparando. Desinformação alimentada por IA ameaça as eleições de outubro. Data centers demandam energia massiva. O futuro está sendo decidido agora.
+                    <p data-en="The year is 2026. Brazil faces unprecedented geopolitical pressures. The Trump administration is reshaping international relations. China's economic troubles ripple through commodity markets—but Chinese investment in AI and green energy is surging. AI-powered disinformation threatens October's elections. Data centers demand massive energy. The future is being decided now."
+                        data-pt="Estamos em 2026. O Brasil enfrenta pressões geopolíticas sem precedentes. O governo Trump está remodelando as relações internacionais. Os problemas econômicos da China afetam os mercados de commodities—mas o investimento chinês em IA e energia verde está disparando. Desinformação alimentada por IA ameaça as eleições de outubro. Data centers demandam energia massiva. O futuro está sendo decidido agora.">
+                        Estamos em 2026. O Brasil enfrenta pressões geopolíticas sem precedentes. O governo Trump está
+                        remodelando as relações hemisféricas. Os problemas econômicos da China afetam os mercados de
+                        commodities—mas o investimento chinês em IA e energia verde está disparando. Desinformação
+                        alimentada por IA ameaça as eleições de outubro. Data centers demandam energia massiva. O futuro
+                        está sendo decidido agora.
                     </p>
                     <p style="margin-top: 15px; color: #888;"
-                       data-en="As a senior advisor to the Brazilian government, your decisions will determine whether Brazil emerges stronger—or gets caught in the crossfire of great power competition. Navigate the AI-energy nexus, balance superpower pressures, and protect democracy."
-                       data-pt="Como assessor sênior do governo brasileiro, suas decisões determinarão se o Brasil sairá fortalecido—ou será pego no fogo cruzado da competição entre grandes potências. Navegue o nexo IA-energia, equilibre as pressões das superpotências e proteja a democracia.">
-                       Como assessor sênior do governo brasileiro, suas decisões determinarão se o Brasil sairá fortalecido—ou será pego no fogo cruzado da competição entre grandes potências. Navegue o nexo IA-energia, equilibre as pressões das superpotências e proteja a democracia.
+                        data-en="As a senior advisor to the Brazilian government, your decisions will determine whether Brazil emerges stronger—or gets caught in the crossfire of great power competition. Navigate the AI-energy nexus, balance superpower pressures, and protect democracy."
+                        data-pt="Como assessor sênior do governo brasileiro, suas decisões determinarão se o Brasil sairá fortalecido—ou será pego no fogo cruzado da competição entre grandes potências. Navegue o nexo IA-energia, equilibre as pressões das superpotências e proteja a democracia.">
+                        Como assessor sênior do governo brasileiro, suas decisões determinarão se o Brasil sairá
+                        fortalecido—ou será pego no fogo cruzado da competição entre grandes potências. Navegue o nexo
+                        IA-energia, equilibre as pressões das superpotências e proteja a democracia.
                     </p>
                 </div>
 
                 <div class="brazil-context">
                     <h4 data-en="Brazil in the Report" data-pt="O Brasil no Relatório">O Brasil no Relatório</h4>
                     <p data-en="The Eurasia Group report highlights Brazil's unique position: facing US pressure on critical minerals while 70% of Chinese FDI flows to green energy. AI threatens the 2026 elections through deepfakes—the TSE banned them but enforcement is difficult. Meanwhile, China's electrotech dominance (solar, batteries, EVs) creates both opportunity and dependency. The AI-energy nexus—data centers consuming Brazil's renewable power—is the new battleground."
-                       data-pt="O relatório do Eurasia Group destaca a posição única do Brasil: enfrentando pressão dos EUA sobre minerais críticos enquanto 70% do IED chinês flui para energia verde. A IA ameaça as eleições de 2026 através de deepfakes—o TSE os proibiu mas a aplicação é difícil. Enquanto isso, a dominância eletrotecnológica da China (solar, baterias, EVs) cria tanto oportunidade quanto dependência. O nexo IA-energia—data centers consumindo energia renovável do Brasil—é o novo campo de batalha.">
-                       O relatório do Eurasia Group destaca a posição única do Brasil: enfrentando pressão dos EUA sobre minerais críticos enquanto 70% do IED chinês flui para energia verde. A IA ameaça as eleições de 2026 através de deepfakes—o TSE os proibiu mas a aplicação é difícil. Enquanto isso, a dominância eletrotecnológica da China (solar, baterias, EVs) cria tanto oportunidade quanto dependência. O nexo IA-energia—data centers consumindo energia renovável do Brasil—é o novo campo de batalha.
+                        data-pt="O relatório do Eurasia Group destaca a posição única do Brasil: enfrentando pressão dos EUA sobre minerais críticos enquanto 70% do IED chinês flui para energia verde. A IA ameaça as eleições de 2026 através de deepfakes—o TSE os proibiu mas a aplicação é difícil. Enquanto isso, a dominância eletrotecnológica da China (solar, baterias, EVs) cria tanto oportunidade quanto dependência. O nexo IA-energia—data centers consumindo energia renovável do Brasil—é o novo campo de batalha.">
+                        O relatório do Eurasia Group destaca a posição única do Brasil: enfrentando pressão dos EUA
+                        sobre minerais críticos enquanto 70% do IED chinês flui para energia verde. A IA ameaça as
+                        eleições de 2026 através de deepfakes—o TSE os proibiu mas a aplicação é difícil. Enquanto isso,
+                        a dominância eletrotecnológica da China (solar, baterias, EVs) cria tanto oportunidade quanto
+                        dependência. O nexo IA-energia—data centers consumindo energia renovável do Brasil—é o novo
+                        campo de batalha.
                     </p>
                 </div>
 
@@ -653,8 +766,8 @@
                             <span class="scenario-icon">🦅</span>
                             <h3 data-en="The Trump Ultimatum" data-pt="O Ultimato de Trump">O Ultimato de Trump</h3>
                             <p data-en="Tariffs or minerals? How much sovereignty for market access?"
-                               data-pt="Tarifas ou minerais? Quanta soberania por acesso ao mercado?">
-                               Tarifas ou minerais? Quanta soberania por acesso ao mercado?
+                                data-pt="Tarifas ou minerais? Quanta soberania por acesso ao mercado?">
+                                Tarifas ou minerais? Quanta soberania por acesso ao mercado?
                             </p>
                             <span class="risk-tag">Risco #3</span>
                         </div>
@@ -662,8 +775,8 @@
                             <span class="scenario-icon">⚖️</span>
                             <h3 data-en="The China Dilemma" data-pt="O Dilema da China">O Dilema da China</h3>
                             <p data-en="Your biggest partner in crisis. Can you balance both giants?"
-                               data-pt="Seu maior parceiro em crise. Consegue equilibrar os gigantes?">
-                               Seu maior parceiro em crise. Consegue equilibrar os gigantes?
+                                data-pt="Seu maior parceiro em crise. Consegue equilibrar os gigantes?">
+                                Seu maior parceiro em crise. Consegue equilibrar os gigantes?
                             </p>
                             <span class="risk-tag">Risco #7</span>
                         </div>
@@ -671,8 +784,8 @@
                             <span class="scenario-icon">🚨</span>
                             <h3 data-en="Venezuela Next Door" data-pt="Venezuela ao Lado">Venezuela ao Lado</h3>
                             <p data-en="Maduro falls. Chaos erupts. Refugees surge. What's Brazil's role?"
-                               data-pt="Maduro cai. Caos irrompe. Refugiados avançam. Qual o papel do Brasil?">
-                               Maduro cai. Caos irrompe. Refugiados avançam. Qual o papel do Brasil?
+                                data-pt="Maduro cai. Caos irrompe. Refugiados avançam. Qual o papel do Brasil?">
+                                Maduro cai. Caos irrompe. Refugiados avançam. Qual o papel do Brasil?
                             </p>
                             <span class="risk-tag">Risco #3</span>
                         </div>
@@ -680,17 +793,18 @@
                             <span class="scenario-icon">🤖</span>
                             <h3 data-en="The Digital Election" data-pt="A Eleição Digital">A Eleição Digital</h3>
                             <p data-en="Deepfakes. Disinformation. Data centers. Can democracy survive AI?"
-                               data-pt="Deepfakes. Desinformação. Data centers. A democracia sobrevive à IA?">
-                               Deepfakes. Desinformação. Data centers. A democracia sobrevive à IA?
+                                data-pt="Deepfakes. Desinformação. Data centers. A democracia sobrevive à IA?">
+                                Deepfakes. Desinformação. Data centers. A democracia sobrevive à IA?
                             </p>
                             <span class="risk-tag">Risco #8</span>
                         </div>
                         <div class="scenario-card" onclick="startScenario('electrotech_energy')">
                             <span class="scenario-icon">⚡</span>
-                            <h3 data-en="The Green Power Race" data-pt="A Corrida da Energia Verde">A Corrida da Energia Verde</h3>
+                            <h3 data-en="The Green Power Race" data-pt="A Corrida da Energia Verde">A Corrida da Energia
+                                Verde</h3>
                             <p data-en="Cheap solar vs sovereignty. AI needs energy. Who controls the grid?"
-                               data-pt="Solar barato vs soberania. IA precisa de energia. Quem controla a rede?">
-                               Solar barato vs soberania. IA precisa de energia. Quem controla a rede?
+                                data-pt="Solar barato vs soberania. IA precisa de energia. Quem controla a rede?">
+                                Solar barato vs soberania. IA precisa de energia. Quem controla a rede?
                             </p>
                             <span class="risk-tag">Risco #2</span>
                         </div>
@@ -708,7 +822,8 @@
                     <div class="role-badge" style="margin-bottom: 0;">
                         <span id="role-display">Assessor Especial</span>
                     </div>
-                    <button class="btn-secondary" onclick="backToMenu()" style="padding: 8px 20px; font-size: 0.9em;" data-en="← Back to Menu" data-pt="← Voltar ao Menu">← Voltar ao Menu</button>
+                    <button class="btn-secondary" onclick="backToMenu()" style="padding: 8px 20px; font-size: 0.9em;"
+                        data-en="← Back to Menu" data-pt="← Voltar ao Menu">← Voltar ao Menu</button>
                 </div>
 
                 <div class="card">
@@ -733,12 +848,14 @@
                     </div>
 
                     <div class="learn-more">
-                        <h4 data-en="What the Experts Say" data-pt="O Que Dizem os Especialistas">O Que Dizem os Especialistas <span class="source-tag">Eurasia Group</span></h4>
+                        <h4 data-en="What the Experts Say" data-pt="O Que Dizem os Especialistas">O Que Dizem os
+                            Especialistas <span class="source-tag">Eurasia Group</span></h4>
                         <p id="expert-insight">Análise do relatório Top Risks 2026...</p>
                     </div>
 
                     <div class="buttons-row">
-                        <button class="btn-primary" id="continue-btn" onclick="continueGame()" data-en="Continue" data-pt="Continuar">Continuar</button>
+                        <button class="btn-primary" id="continue-btn" onclick="continueGame()" data-en="Continue"
+                            data-pt="Continuar">Continuar</button>
                     </div>
                 </div>
             </div>
@@ -749,7 +866,8 @@
                     <h2 data-en="Scenario Complete" data-pt="Cenário Concluído">Cenário Concluído</h2>
                     <div class="score-display">
                         <div class="score-number" id="final-score">0</div>
-                        <div class="score-label" data-en="Strategic Acumen" data-pt="Perspicácia Estratégica">Perspicácia Estratégica</div>
+                        <div class="score-label" data-en="Strategic Acumen" data-pt="Perspicácia Estratégica">
+                            Perspicácia Estratégica</div>
                     </div>
 
                     <div class="stats-row">
@@ -759,7 +877,8 @@
                         </div>
                         <div class="stat-item">
                             <div class="stat-value" id="optimal-choices">0</div>
-                            <div class="stat-label" data-en="Optimal Choices" data-pt="Escolhas Ótimas">Escolhas Ótimas</div>
+                            <div class="stat-label" data-en="Optimal Choices" data-pt="Escolhas Ótimas">Escolhas Ótimas
+                            </div>
                         </div>
                     </div>
 
@@ -769,8 +888,10 @@
                     </div>
 
                     <div class="buttons-row">
-                        <button class="btn-secondary" onclick="restartScenario()" data-en="Replay" data-pt="Jogar Novamente">Jogar Novamente</button>
-                        <button class="btn-primary" onclick="backToMenu()" data-en="New Scenario" data-pt="Novo Cenário">Novo Cenário</button>
+                        <button class="btn-secondary" onclick="restartScenario()" data-en="Replay"
+                            data-pt="Jogar Novamente">Jogar Novamente</button>
+                        <button class="btn-primary" onclick="backToMenu()" data-en="New Scenario"
+                            data-pt="Novo Cenário">Novo Cenário</button>
                     </div>
                 </div>
             </div>
@@ -779,19 +900,268 @@
         <footer>
             <p>
                 <span data-en="Based on " data-pt="Baseado no ">Baseado no </span>
-                <a href="https://www.eurasiagroup.net/issues/top-risks-2026" target="_blank">Eurasia Group Top Risks 2026</a>
+                <a href="https://www.eurasiagroup.net/issues/top-risks-2026" target="_blank">Eurasia Group Top Risks
+                    2026</a>
             </p>
             <p style="margin-top: 8px;">
                 <span data-en="Created by " data-pt="Criado por ">Criado por </span>
                 <strong>Fausto Sá Teles</strong> & <strong>Claude</strong> (Anthropic)
             </p>
             <p style="margin-top: 5px; font-size: 0.8em; opacity: 0.7;">
-                <span data-en="Educational simulator — not affiliated with Eurasia Group" data-pt="Simulador educacional — sem afiliação com Eurasia Group">Simulador educacional — sem afiliação com Eurasia Group</span>
+                <span data-en="Educational simulator — not affiliated with Eurasia Group"
+                    data-pt="Simulador educacional — sem afiliação com Eurasia Group">Simulador educacional — sem
+                    afiliação com Eurasia Group</span>
             </p>
         </footer>
     </div>
 
     <script>
+        // ============ AUDIO SYSTEM ============
+        let audioContext = null;
+        let isMuted = false;
+        let ambientOscillators = [];
+        let ambientGain = null;
+        let musicStarted = false;
+
+        // Initialize audio context on first user interaction
+        function initAudio() {
+            if (audioContext) {
+                // Resume if suspended (browser autoplay policy)
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+                if (!musicStarted) startAmbientMusic();
+                return;
+            }
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            startAmbientMusic();
+        }
+
+        // Typewriter click - using noise burst for mechanical sound
+        function playTypeSound() {
+            if (isMuted || !audioContext) return;
+
+            const bufferSize = audioContext.sampleRate * 0.02; // 20ms of noise
+            const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+            const data = buffer.getChannelData(0);
+
+            // Create short noise burst
+            for (let i = 0; i < bufferSize; i++) {
+                data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.1));
+            }
+
+            const noise = audioContext.createBufferSource();
+            noise.buffer = buffer;
+
+            // Filter to make it sound more like a key click
+            const filter = audioContext.createBiquadFilter();
+            filter.type = 'bandpass';
+            filter.frequency.value = 2000 + Math.random() * 1000;
+            filter.Q.value = 5;
+
+            const gain = audioContext.createGain();
+            gain.gain.setValueAtTime(0.6, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.03);
+
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioContext.destination);
+
+            noise.start();
+        }
+
+        // Ambient tension music - darker, more audible
+        function startAmbientMusic() {
+            if (!audioContext || musicStarted) return;
+            musicStarted = true;
+
+            ambientGain = audioContext.createGain();
+            ambientGain.gain.setValueAtTime(0.25, audioContext.currentTime);
+            ambientGain.connect(audioContext.destination);
+
+            // Deep bass drone
+            const bassOsc = audioContext.createOscillator();
+            const bassGain = audioContext.createGain();
+            bassOsc.type = 'sine';
+            bassOsc.frequency.setValueAtTime(55, audioContext.currentTime); // A1
+            bassGain.gain.setValueAtTime(0.4, audioContext.currentTime);
+            bassOsc.connect(bassGain);
+            bassGain.connect(ambientGain);
+
+            // LFO for bass pulse
+            const bassLfo = audioContext.createOscillator();
+            const bassLfoGain = audioContext.createGain();
+            bassLfo.frequency.setValueAtTime(0.2, audioContext.currentTime);
+            bassLfoGain.gain.setValueAtTime(0.15, audioContext.currentTime);
+            bassLfo.connect(bassLfoGain);
+            bassLfoGain.connect(bassGain.gain);
+            bassLfo.start();
+            bassOsc.start();
+
+            // Mid tension pad
+            const padOsc = audioContext.createOscillator();
+            const padGain = audioContext.createGain();
+            padOsc.type = 'triangle';
+            padOsc.frequency.setValueAtTime(110, audioContext.currentTime); // A2
+            padGain.gain.setValueAtTime(0.2, audioContext.currentTime);
+            padOsc.connect(padGain);
+            padGain.connect(ambientGain);
+
+            // Slow detuning for unease
+            const padLfo = audioContext.createOscillator();
+            const padLfoGain = audioContext.createGain();
+            padLfo.frequency.setValueAtTime(0.08, audioContext.currentTime);
+            padLfoGain.gain.setValueAtTime(3, audioContext.currentTime);
+            padLfo.connect(padLfoGain);
+            padLfoGain.connect(padOsc.frequency);
+            padLfo.start();
+            padOsc.start();
+
+            // High eerie tone
+            const highOsc = audioContext.createOscillator();
+            const highGain = audioContext.createGain();
+            highOsc.type = 'sine';
+            highOsc.frequency.setValueAtTime(330, audioContext.currentTime); // E4
+            highGain.gain.setValueAtTime(0.08, audioContext.currentTime);
+            highOsc.connect(highGain);
+            highGain.connect(ambientGain);
+
+            const highLfo = audioContext.createOscillator();
+            const highLfoGain = audioContext.createGain();
+            highLfo.frequency.setValueAtTime(0.05, audioContext.currentTime);
+            highLfoGain.gain.setValueAtTime(5, audioContext.currentTime);
+            highLfo.connect(highLfoGain);
+            highLfoGain.connect(highOsc.frequency);
+            highLfo.start();
+            highOsc.start();
+
+            ambientOscillators = [
+                { osc: bassOsc, lfo: bassLfo },
+                { osc: padOsc, lfo: padLfo },
+                { osc: highOsc, lfo: highLfo }
+            ];
+        }
+
+        function stopAmbientMusic() {
+            ambientOscillators.forEach(({ osc, lfo }) => {
+                try { osc.stop(); } catch (e) { }
+                try { lfo.stop(); } catch (e) { }
+            });
+            ambientOscillators = [];
+            musicStarted = false;
+        }
+
+        function toggleSound() {
+            // Initialize on first click
+            if (!audioContext) {
+                initAudio();
+                isMuted = false;
+            } else {
+                isMuted = !isMuted;
+                if (!isMuted && audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+            }
+
+            const btn = document.getElementById('sound-toggle');
+            btn.textContent = isMuted ? '🔇' : '🔊';
+            btn.classList.toggle('muted', isMuted);
+
+            if (ambientGain) {
+                ambientGain.gain.setValueAtTime(isMuted ? 0 : 1.0, audioContext.currentTime);
+            }
+        }
+
+        // Choice selection sound - clean click
+        function playChoiceSound() {
+            if (isMuted || !audioContext) return;
+
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+
+            osc.frequency.setValueAtTime(600, audioContext.currentTime);
+            osc.frequency.setValueAtTime(800, audioContext.currentTime + 0.05);
+            osc.type = 'sine';
+
+            gain.gain.setValueAtTime(0.15, audioContext.currentTime);
+            gain.gain.linearRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
+
+            osc.start(audioContext.currentTime);
+            osc.stop(audioContext.currentTime + 0.1);
+        }
+
+        // Consequence sounds - very distinct!
+        function playConsequenceSound(type) {
+            if (isMuted || !audioContext) return;
+
+            if (type === 'positive') {
+                // Victory fanfare - 3 ascending notes
+                [523, 659, 784].forEach((freq, i) => { // C5, E5, G5
+                    const osc = audioContext.createOscillator();
+                    const gain = audioContext.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioContext.destination);
+                    osc.frequency.setValueAtTime(freq, audioContext.currentTime);
+                    osc.type = 'sine';
+                    const startTime = audioContext.currentTime + i * 0.12;
+                    gain.gain.setValueAtTime(0, startTime);
+                    gain.gain.linearRampToValueAtTime(0.2, startTime + 0.02);
+                    gain.gain.linearRampToValueAtTime(0.1, startTime + 0.15);
+                    gain.gain.linearRampToValueAtTime(0.001, startTime + 0.3);
+                    osc.start(startTime);
+                    osc.stop(startTime + 0.3);
+                });
+
+            } else if (type === 'negative') {
+                // Error buzzer - low harsh tone
+                const osc1 = audioContext.createOscillator();
+                const osc2 = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+
+                osc1.connect(gain);
+                osc2.connect(gain);
+                gain.connect(audioContext.destination);
+
+                osc1.frequency.setValueAtTime(150, audioContext.currentTime);
+                osc1.type = 'sawtooth';
+                osc2.frequency.setValueAtTime(155, audioContext.currentTime); // Slight detune for harshness
+                osc2.type = 'sawtooth';
+
+                gain.gain.setValueAtTime(0.15, audioContext.currentTime);
+                gain.gain.setValueAtTime(0.15, audioContext.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.001, audioContext.currentTime + 0.12);
+                gain.gain.setValueAtTime(0.15, audioContext.currentTime + 0.2);
+                gain.gain.linearRampToValueAtTime(0.001, audioContext.currentTime + 0.4);
+
+                osc1.start(audioContext.currentTime);
+                osc1.stop(audioContext.currentTime + 0.4);
+                osc2.start(audioContext.currentTime);
+                osc2.stop(audioContext.currentTime + 0.4);
+
+            } else {
+                // Neutral - thoughtful bell tone
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+
+                osc.frequency.setValueAtTime(440, audioContext.currentTime); // A4
+                osc.type = 'sine';
+
+                gain.gain.setValueAtTime(0.2, audioContext.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.8);
+
+                osc.start(audioContext.currentTime);
+                osc.stop(audioContext.currentTime + 0.8);
+            }
+        }
+
+        // ============ END AUDIO SYSTEM ============
+
         // Language state
         let currentLang = 'pt';
 
@@ -1818,6 +2188,8 @@
                 if (i < text.length) {
                     element.textContent = text.substring(0, i + 1);
                     element.appendChild(cursor);
+                    // Play typing sound (not on spaces, with slight randomness)
+                    if (text[i] !== ' ' && Math.random() > 0.3) playTypeSound();
                     i++;
                     typewriterTimeout = setTimeout(type, speed);
                 } else {
@@ -1830,6 +2202,7 @@
 
         // Start a scenario
         function startScenario(scenarioId) {
+            initAudio(); // Start audio on user interaction
             currentScenario = scenarios[scenarioId];
             currentStep = 0;
             score = 0;
@@ -1855,7 +2228,7 @@
                 situationText = situationText.replace('${previousOutcome}', window.lastOutcomeText || '');
             }
             const situationEl = document.getElementById('situation-text');
-            typeWriter(situationEl, situationText, 12);
+            typeWriter(situationEl, situationText, 25);
 
             const choicesContainer = document.getElementById('choices-container');
             choicesContainer.innerHTML = '';
@@ -1885,6 +2258,8 @@
 
         // Handle choice
         function makeChoice(choiceIndex) {
+            playChoiceSound(); // Play selection sound
+
             const step = currentScenario.steps[currentStep];
             const choice = step.choices[choiceIndex];
             const consequence = currentScenario.consequences[choice.consequence];
@@ -1912,6 +2287,8 @@
 
             const box = document.getElementById('consequence-box');
             box.className = 'consequence-box ' + consequence.type;
+            // Play consequence sound
+            playConsequenceSound(consequence.type);
             // Re-trigger animation
             box.style.animation = 'none';
             box.offsetHeight; // Trigger reflow
@@ -1974,4 +2351,5 @@
         }
     </script>
 </body>
+
 </html>
