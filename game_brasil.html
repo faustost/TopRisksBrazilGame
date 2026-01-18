@@ -728,7 +728,7 @@
             <!-- Start Screen -->
             <div id="start-screen" class="screen active">
                 <div class="card">
-                    <h2 data-en="Welcome, Advisor" data-pt="Bem-vindo, Analista">Bem-vindo, Analista</h2>
+                    <h2 data-en="Welcome, Analyst" data-pt="Bem-vindo, Analista">Bem-vindo, Analista</h2>
                     <p data-en="The year is 2026. Brazil faces unprecedented geopolitical pressures. The Trump administration is reshaping international relations. China's economic troubles ripple through commodity markets—but Chinese investment in AI and green energy is surging. AI-powered disinformation threatens October's elections. Data centers demand massive energy. The future is being decided now."
                         data-pt="Estamos em 2026. O Brasil enfrenta pressões geopolíticas sem precedentes. O governo Trump está remodelando as relações internacionais. Os problemas econômicos da China afetam os mercados de commodities—mas o investimento chinês em IA e energia verde está disparando. Desinformação alimentada por IA ameaça as eleições de outubro. Data centers demandam energia massiva. O futuro está sendo decidido agora.">
                         Estamos em 2026. O Brasil enfrenta pressões geopolíticas sem precedentes. O governo Trump está
@@ -970,85 +970,54 @@
             noise.start();
         }
 
-        // Ambient tension music - darker, more audible
+        // Background music - Procedurally generated dark ambient drone
         function startAmbientMusic() {
-            if (!audioContext || musicStarted) return;
+            if (musicStarted || !audioContext) return;
             musicStarted = true;
 
             ambientGain = audioContext.createGain();
-            ambientGain.gain.setValueAtTime(0.25, audioContext.currentTime);
+            ambientGain.gain.setValueAtTime(0, audioContext.currentTime);
+            ambientGain.gain.linearRampToValueAtTime(isMuted ? 0 : 0.2, audioContext.currentTime + 5); // Fade in over 5s to 20% volume
             ambientGain.connect(audioContext.destination);
 
-            // Deep bass drone
-            const bassOsc = audioContext.createOscillator();
-            const bassGain = audioContext.createGain();
-            bassOsc.type = 'sine';
-            bassOsc.frequency.setValueAtTime(55, audioContext.currentTime); // A1
-            bassGain.gain.setValueAtTime(0.4, audioContext.currentTime);
-            bassOsc.connect(bassGain);
-            bassGain.connect(ambientGain);
+            const baseFreq = 55; // A1 - a low, ominous frequency
 
-            // LFO for bass pulse
-            const bassLfo = audioContext.createOscillator();
-            const bassLfoGain = audioContext.createGain();
-            bassLfo.frequency.setValueAtTime(0.2, audioContext.currentTime);
-            bassLfoGain.gain.setValueAtTime(0.15, audioContext.currentTime);
-            bassLfo.connect(bassLfoGain);
-            bassLfoGain.connect(bassGain.gain);
-            bassLfo.start();
-            bassOsc.start();
+            // Create two oscillators for a detuned, beating effect
+            const osc1 = audioContext.createOscillator();
+            osc1.type = 'sawtooth';
+            osc1.frequency.setValueAtTime(baseFreq, audioContext.currentTime);
+            
+            const osc2 = audioContext.createOscillator();
+            osc2.type = 'sawtooth';
+            osc2.frequency.setValueAtTime(baseFreq - 0.5, audioContext.currentTime); // Slightly detuned
 
-            // Mid tension pad
-            const padOsc = audioContext.createOscillator();
-            const padGain = audioContext.createGain();
-            padOsc.type = 'triangle';
-            padOsc.frequency.setValueAtTime(110, audioContext.currentTime); // A2
-            padGain.gain.setValueAtTime(0.2, audioContext.currentTime);
-            padOsc.connect(padGain);
-            padGain.connect(ambientGain);
+            // Low-pass filter to make it sound muffled and distant
+            const filter = audioContext.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(200, audioContext.currentTime); // Cut off high frequencies
 
-            // Slow detuning for unease
-            const padLfo = audioContext.createOscillator();
-            const padLfoGain = audioContext.createGain();
-            padLfo.frequency.setValueAtTime(0.08, audioContext.currentTime);
-            padLfoGain.gain.setValueAtTime(3, audioContext.currentTime);
-            padLfo.connect(padLfoGain);
-            padLfoGain.connect(padOsc.frequency);
-            padLfo.start();
-            padOsc.start();
+            osc1.connect(filter);
+            osc2.connect(filter);
+            filter.connect(ambientGain);
 
-            // High eerie tone
-            const highOsc = audioContext.createOscillator();
-            const highGain = audioContext.createGain();
-            highOsc.type = 'sine';
-            highOsc.frequency.setValueAtTime(330, audioContext.currentTime); // E4
-            highGain.gain.setValueAtTime(0.08, audioContext.currentTime);
-            highOsc.connect(highGain);
-            highGain.connect(ambientGain);
+            osc1.start();
+            osc2.start();
 
-            const highLfo = audioContext.createOscillator();
-            const highLfoGain = audioContext.createGain();
-            highLfo.frequency.setValueAtTime(0.05, audioContext.currentTime);
-            highLfoGain.gain.setValueAtTime(5, audioContext.currentTime);
-            highLfo.connect(highLfoGain);
-            highLfoGain.connect(highOsc.frequency);
-            highLfo.start();
-            highOsc.start();
-
-            ambientOscillators = [
-                { osc: bassOsc, lfo: bassLfo },
-                { osc: padOsc, lfo: padLfo },
-                { osc: highOsc, lfo: highLfo }
-            ];
+            ambientOscillators = [osc1, osc2];
         }
 
         function stopAmbientMusic() {
-            ambientOscillators.forEach(({ osc, lfo }) => {
-                try { osc.stop(); } catch (e) { }
-                try { lfo.stop(); } catch (e) { }
-            });
-            ambientOscillators = [];
-            musicStarted = false;
+            if (!musicStarted || !ambientGain) return;
+            
+            ambientGain.gain.cancelScheduledValues(audioContext.currentTime);
+            ambientGain.gain.linearRampToValueAtTime(0, audioContext.currentTime + 1); // Fade out
+            
+            setTimeout(() => {
+                ambientOscillators.forEach(osc => osc.stop());
+                ambientOscillators = [];
+                ambientGain = null;
+                musicStarted = false;
+            }, 1000);
         }
 
         function toggleSound() {
@@ -1068,7 +1037,9 @@
             btn.classList.toggle('muted', isMuted);
 
             if (ambientGain) {
-                ambientGain.gain.setValueAtTime(isMuted ? 0 : 1.0, audioContext.currentTime);
+                // Using a ramp for smoother transitions
+                ambientGain.gain.cancelScheduledValues(audioContext.currentTime);
+                ambientGain.gain.linearRampToValueAtTime(isMuted ? 0 : 0.2, audioContext.currentTime + 0.5);
             }
         }
 
@@ -2315,6 +2286,7 @@
 
         // Show results
         function showResults() {
+            stopAmbientMusic();
             const maxScore = currentScenario.steps.length * 10;
             const percentage = Math.round((score / maxScore) * 100);
 
@@ -2340,6 +2312,7 @@
 
         // Back to menu
         function backToMenu() {
+            stopAmbientMusic();
             currentScenario = null;
             showScreen('start-screen');
         }
