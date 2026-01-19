@@ -8,7 +8,7 @@ Open `game_brasil.html` in any modern web browser - no server required.
 
 ## Features
 
-- **3 Brazil-centric scenarios** exploring geopolitical risks from a Brazilian perspective
+- **5 Brazil-centric scenarios** exploring geopolitical risks from a Brazilian perspective
 - **Bilingual support** - toggle between Portuguese and English
 - **Branching narratives** - your choices lead to different outcomes
 - **Expert insights** - learn from the Eurasia Group report analysis
