@@ -3288,6 +3288,9 @@
 
         // Page navigation
         function showPage(page) {
+            // Stop typewriter effect
+            if (typewriterTimeout) clearTimeout(typewriterTimeout);
+
             // Update navigation links
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.classList.remove('active');
@@ -3308,6 +3311,8 @@
                 showScreen('start-screen');
             } else if (page === 'about') {
                 // Hide game container and header, show about screen
+                // Stop all sounds (ambient music)
+                stopAmbientMusic();
                 gameContainer.style.display = 'none';
                 aboutScreen.style.display = 'block';
                 if (header) header.style.display = 'none';
