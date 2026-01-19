@@ -3302,6 +3302,10 @@
 
             if (page === 'home') {
                 // Show game container, hide about screen
+                // Resume ambient music
+                if (audioContext && !musicStarted) {
+                    initAudio();
+                }
                 gameContainer.style.display = 'flex';
                 aboutScreen.style.display = 'none';
                 if (header) header.style.display = 'block';
