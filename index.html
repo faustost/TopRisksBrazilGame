@@ -3306,10 +3306,10 @@
                 // Make sure we're on the start screen
                 showScreen('start-screen');
             } else if (page === 'about') {
-                // Hide game container, show about screen
+                // Hide game container and header, show about screen
                 gameContainer.style.display = 'none';
                 aboutScreen.style.display = 'block';
-                if (header) header.style.display = 'block';
+                if (header) header.style.display = 'none';
                 document.querySelectorAll('.nav-link')[1].classList.add('active');
             }
 
