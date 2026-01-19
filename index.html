@@ -1630,6 +1630,60 @@
             }
         }
 
+        // Celebration sound - applause and fanfare for game completion
+        function playCelebrationSound() {
+            if (isMuted || !audioContext) return;
+
+            // Create applause effect using noise bursts
+            for (let i = 0; i < 12; i++) {
+                const startTime = audioContext.currentTime + i * 0.08;
+                const bufferSize = audioContext.sampleRate * 0.05;
+                const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+                const data = buffer.getChannelData(0);
+
+                // Create noise burst
+                for (let j = 0; j < bufferSize; j++) {
+                    data[j] = (Math.random() * 2 - 1) * Math.exp(-j / (bufferSize * 0.3));
+                }
+
+                const noise = audioContext.createBufferSource();
+                noise.buffer = buffer;
+
+                const filter = audioContext.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.value = 1500 + Math.random() * 500;
+                filter.Q.value = 3;
+
+                const gain = audioContext.createGain();
+                gain.gain.setValueAtTime(0.15 + Math.random() * 0.1, startTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.1);
+
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.connect(audioContext.destination);
+
+                noise.start(startTime);
+            }
+
+            // Victory fanfare after applause starts
+            const fanfareDelay = 0.3;
+            [523, 659, 784, 1047].forEach((freq, i) => { // C5, E5, G5, C6
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+                osc.frequency.setValueAtTime(freq, audioContext.currentTime);
+                osc.type = 'triangle';
+                const startTime = audioContext.currentTime + fanfareDelay + i * 0.15;
+                gain.gain.setValueAtTime(0, startTime);
+                gain.gain.linearRampToValueAtTime(0.25, startTime + 0.05);
+                gain.gain.linearRampToValueAtTime(0.15, startTime + 0.2);
+                gain.gain.linearRampToValueAtTime(0.001, startTime + 0.4);
+                osc.start(startTime);
+                osc.stop(startTime + 0.4);
+            });
+        }
+
         // ============ END AUDIO SYSTEM ============
 
         // Language state
@@ -3256,6 +3310,7 @@
         // Show results
         function showResults() {
             stopAmbientMusic();
+            playCelebrationSound(); // Play celebration sound when reaching results
             const maxScore = currentScenario.steps.length * 10;
             const percentage = Math.round((score / maxScore) * 100);
 
