@@ -696,6 +696,20 @@
         .sound-toggle.muted {
             opacity: 0.5;
         }
+
+        .header-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            max-height: 400px;
+            object-fit: cover;
+        }
     </style>
 </head>
 
@@ -708,7 +722,8 @@
             <button class="lang-btn" onclick="setLang('en')">EN</button>
         </div>
 
-        <header>
+        <header id="main-header">
+            <img src="risk_image.jpg" alt="Crisis Room 2026" class="header-image">
             <h1><span data-en="Crisis Room " data-pt="Sala de Crise ">Sala de Crise </span><span>Brasil</span> <span
                     class="year">2026</span></h1>
             <p data-en="A Geopolitical Decision Simulator" data-pt="Simulador de Decisões Geopolíticas">Simulador de
@@ -905,7 +920,7 @@
             </p>
             <p style="margin-top: 8px;">
                 <span data-en="Created by " data-pt="Criado por ">Criado por </span>
-                <strong>Fausto Sá Teles</strong> & <strong>Claude</strong> (Anthropic)
+                <strong>Fausto Sá Teles</strong>, <strong>Gemini</strong> (Google) & <strong>Claude</strong> (Anthropic)
             </p>
             <p style="margin-top: 5px; font-size: 0.8em; opacity: 0.7;">
                 <span data-en="Educational simulator — not affiliated with Eurasia Group"
@@ -1142,6 +1157,7 @@
         let score = 0;
         let optimalChoices = 0;
         let totalDecisions = 0;
+        let lastConsequenceKey = null;
 
         // Scenarios Data - Brazil Focus
         const scenarios = {
@@ -1257,9 +1273,99 @@
                                 optimal: false
                             }
                         ]
+                    },
+                    {
+                        title: { en: "The Electoral Intervention", pt: "A Intervenção Eleitoral" },
+                        situation: {
+                            en: "${previousOutcome} It's September 2026. Polls are tight. A prominent US Senator, acting as a Trump proxy, publicly endorses the opposition candidate, calling your administration 'weak on communism' and promising a 'golden era' if the opposition wins. The TSE is debating whether to censor this as 'foreign interference' under new AI/disinformation laws. The President fears looking weak but also fears a direct clash with Washington.",
+                            pt: "${previousOutcome} É setembro de 2026. As pesquisas estão apertadas. Um proeminente senador dos EUA, agindo como proxy de Trump, endossa publicamente o candidato da oposição, chamando sua administração de 'fraca contra o comunismo' e prometendo uma 'era de ouro' se a oposição vencer. O TSE debate se deve censurar isso como 'interferência estrangeira' sob as novas leis de IA/desinformação. O Presidente teme parecer fraco mas também teme um choque direto com Washington."
+                        },
+                        choices: [
+                            {
+                                label: { en: "Diplomatic Protest", pt: "Protesto Diplomático" },
+                                icon: "📜",
+                                shortText: {
+                                    en: "Summon the Ambassador. Issue a note. Avoid direct confrontation.",
+                                    pt: "Convocar o Embaixador. Emitir nota. Evitar confronto direto."
+                                },
+                                text: {
+                                    en: "Recommend a formal diplomatic protest. Summon the US Ambassador but avoid public escalation. Keep the TSE out of it to prevent a constitutional crisis.",
+                                    pt: "Recomendar um protesto diplomático formal. Convocar o Embaixador dos EUA mas evitar escalada pública. Manter o TSE fora disso para prevenir uma crise constitucional."
+                                },
+                                consequence: "diplomatic_protest",
+                                points: 5,
+                                optimal: false
+                            },
+                            {
+                                label: { en: "TSE Censorship", pt: "Censura do TSE" },
+                                icon: "⚖️",
+                                shortText: {
+                                    en: "Support TSE action. Block the statement online. Defend sovereignty.",
+                                    pt: "Apoiar ação do TSE. Bloquear a declaração online. Defender soberania."
+                                },
+                                text: {
+                                    en: "Recommend supporting TSE action to block the Senator's statement on social media as 'foreign electoral interference.' Assert Brazilian sovereignty over its own elections, regardless of US reaction.",
+                                    pt: "Recomendar apoiar a ação do TSE para bloquear a declaração do Senador nas redes sociais como 'interferência eleitoral estrangeira.' Afirmar a soberania brasileira sobre suas próprias eleições, independentemente da reação dos EUA."
+                                },
+                                consequence: "tse_censorship",
+                                points: 3,
+                                optimal: false
+                            },
+                            {
+                                label: { en: "Counter-Narrative", pt: "Contra-Narrativa" },
+                                icon: "📢",
+                                shortText: {
+                                    en: "Use it politically. 'They want to buy our country.' Rally the base.",
+                                    pt: "Usar politicamente. 'Eles querem comprar nosso país.' Mobilizar a base."
+                                },
+                                text: {
+                                    en: "Recommend ignoring the legal route and using the endorsement politically. Frame it as 'imperialist interference.' Tell voters: 'They want to buy our country; we want to lead it.' Turn the attack into a rallying cry.",
+                                    pt: "Recomendar ignorar a rota legal e usar o endosso politicamente. Enquadrar como 'interferência imperialista.' Dizer aos eleitores: 'Eles querem comprar nosso país; nós queremos liderá-lo.' Transformar o ataque em um grito de guerra."
+                                },
+                                consequence: "counter_narrative",
+                                points: 10,
+                                optimal: true
+                            }
+                        ]
                     }
                 ],
                 consequences: {
+                    diplomatic_protest: {
+                        type: "neutral",
+                        title: { en: "Weak Response", pt: "Resposta Fraca" },
+                        text: {
+                            en: "The protest is ignored. The Senator doubles down. The opposition amplifies the endorsement, claiming the world supports them. Your base feels demobilized by the lack of fight.",
+                            pt: "O protesto é ignorado. O Senador dobra a aposta. A oposição amplifica o endosso, alegando que o mundo os apoia. Sua base se sente desmobilizada pela falta de luta."
+                        },
+                        expert: {
+                            en: "The report notes that US interference can 'inadvertently benefit Lula’s reelection bid' if played right. A weak bureaucratic response fails to capitalize on the nationalist backlash.",
+                            pt: "O relatório observa que a interferência dos EUA pode 'involuntariamente beneficiar a reeleição de Lula' se bem jogada. Uma resposta burocrática fraca falha em capitalizar a reação nacionalista."
+                        }
+                    },
+                    tse_censorship: {
+                        type: "negative",
+                        title: { en: "Backlash and Sanctions", pt: "Reação e Sanções" },
+                        text: {
+                            en: "The TSE blocks the content. Washington explodes. Trump calls it 'censorship of free speech' and announces visa restrictions on Brazilian judges. The opposition portrays themselves as martyrs of a 'dictatorship.' Tensions skyrocket.",
+                            pt: "O TSE bloqueia o conteúdo. Washington explode. Trump chama isso de 'censura da liberdade de expressão' e anuncia restrições de visto para juízes brasileiros. A oposição se retrata como mártir de uma 'ditadura.' As tensões disparam."
+                        },
+                        expert: {
+                            en: "The report warns that 'aggressive judicial action against right-wing candidates could trigger tensions with the United States.' Censorship validates the narrative of authoritarianism.",
+                            pt: "O relatório alerta que 'ação judicial agressiva contra candidatos de direita poderia desencadear tensões com os Estados Unidos.' Censura valida a narrativa de autoritarismo."
+                        }
+                    },
+                    counter_narrative: {
+                        type: "positive",
+                        title: { en: "Nationalist Rally", pt: "Mobilização Nacionalista" },
+                        text: {
+                            en: "The strategy works. The 'foreign interference' narrative dominates the news cycle. Polls shift as voters resent the external pressure. You've turned a liability into an asset without provoking a direct diplomatic rupture.",
+                            pt: "A estratégia funciona. A narrativa de 'interferência estrangeira' domina o ciclo de notícias. As pesquisas mudam à medida que os eleitores ressentem a pressão externa. Você transformou um passivo em ativo sem provocar uma ruptura diplomática direta."
+                        },
+                        expert: {
+                            en: "The report observes that 'overt US interference could inadvertently benefit Lula’s reelection bid.' Leveraging nationalism is often more effective than legal sanctions in political disputes.",
+                            pt: "O relatório observa que 'interferência aberta dos EUA poderia involuntariamente beneficiar a reeleição de Lula.' Alavancar o nacionalismo é frequentemente mais eficaz do que sanções legais em disputas políticas."
+                        }
+                    },
                     accept: {
                         type: "negative",
                         title: { en: "Sovereignty Traded", pt: "Soberania Negociada" },
@@ -1451,9 +1557,99 @@
                                 optimal: false
                             }
                         ]
+                    },
+                    {
+                        title: { en: "The Steel Crisis", pt: "A Crise do Aço" },
+                        situation: {
+                            en: "${previousOutcome} Cheap Chinese steel is flooding the market. Two major mills in Minas Gerais have announced immediate closures, threatening 5,000 jobs. Unions are protesting in Brasília. However, the cheap steel is fueling a construction boom, lowering costs for the government's housing program and keeping inflation down—a key boost for the President's reelection.",
+                            pt: "${previousOutcome} O aço chinês barato está inundando o mercado. Duas grandes usinas em Minas Gerais anunciaram fechamentos imediatos, ameaçando 5.000 empregos. Sindicatos protestam em Brasília. No entanto, o aço barato está alimentando um boom na construção, baixando custos para o programa habitacional do governo e mantendo a inflação baixa—um impulso chave para a reeleição do Presidente."
+                        },
+                        choices: [
+                            {
+                                label: { en: "Impose Tariffs", pt: "Impor Tarifas" },
+                                icon: "🛡️",
+                                shortText: {
+                                    en: "25% tariff on Chinese steel. Save the mills. Risk inflation.",
+                                    pt: "Tarifa de 25% no aço chinês. Salvar as usinas. Risco de inflação."
+                                },
+                                text: {
+                                    en: "Recommend immediate antidumping tariffs on Chinese steel. We must protect our industrial base and heavy industry workers, even if it raises construction costs.",
+                                    pt: "Recomendar tarifas antidumping imediatas sobre o aço chinês. Devemos proteger nossa base industrial e trabalhadores da indústria pesada, mesmo que isso aumente os custos de construção."
+                                },
+                                consequence: "steel_tariffs",
+                                points: 4,
+                                optimal: false
+                            },
+                            {
+                                label: { en: "Let it Flow", pt: "Deixar Fluir" },
+                                icon: "🏗️",
+                                shortText: {
+                                    en: "No tariffs. Cheap steel is good for growth. Support workers with welfare.",
+                                    pt: "Sem tarifas. Aço barato é bom para o crescimento. Apoiar trabalhadores com assistência."
+                                },
+                                text: {
+                                    en: "Recommend accepting the cheap imports. The economic benefit of low inflation and cheaper housing outweighs the loss of inefficient mills. Offer expanded unemployment benefits to affected workers.",
+                                    pt: "Recomendar aceitar as importações baratas. O benefício econômico da inflação baixa e habitação mais barata supera a perda de usinas ineficientes. Oferecer benefícios de desemprego expandidos aos trabalhadores afetados."
+                                },
+                                consequence: "steel_laissez_faire",
+                                points: 6,
+                                optimal: false
+                            },
+                            {
+                                label: { en: "Modernization Subsidies", pt: "Subsídios de Modernização" },
+                                icon: "🏭",
+                                shortText: {
+                                    en: "No tariffs. Subsidize green steel transition. Keep China happy.",
+                                    pt: "Sem tarifas. Subsidiar transição para aço verde. Manter China feliz."
+                                },
+                                text: {
+                                    en: "Recommend against tariffs to avoid provoking China. Instead, launch a 'Green Steel' subsidy program to help mills modernize and compete on quality, not price. Maintain the flow of cheap construction materials while offering a future for the industry.",
+                                    pt: "Recomendar contra tarifas para evitar provocar a China. Em vez disso, lançar um programa de subsídios para 'Aço Verde' para ajudar usinas a se modernizar e competir em qualidade, não preço. Manter o fluxo de materiais de construção baratos enquanto oferece um futuro para a indústria."
+                                },
+                                consequence: "steel_subsidies",
+                                points: 10,
+                                optimal: true
+                            }
+                        ]
                     }
                 ],
                 consequences: {
+                    steel_tariffs: {
+                        type: "negative",
+                        title: { en: "Inflation Spikes", pt: "Inflação Dispara" },
+                        text: {
+                            en: "You save the mills, but the cost is high. Construction prices jump, stalling the housing program. Inflation ticks up, forcing the Central Bank to halt rate cuts. China quietly delays sanitary approvals for Brazilian meat exports in retaliation.",
+                            pt: "Você salva as usinas, mas o custo é alto. Preços da construção saltam, estagnando o programa habitacional. A inflação sobe, forçando o Banco Central a parar cortes de juros. A China discretamente atrasa aprovações sanitárias para exportações de carne brasileira em retaliação."
+                        },
+                        expert: {
+                            en: "The report warns that fighting 'imported disinflation' denies Brazil the macroeconomic benefits of cheap Chinese goods. Protectionism saves specific jobs but hurts the broader economy.",
+                            pt: "O relatório alerta que combater a 'desinflação importada' nega ao Brasil os benefícios macroeconômicos de bens chineses baratos. Protecionismo salva empregos específicos mas prejudica a economia mais ampla."
+                        }
+                    },
+                    steel_laissez_faire: {
+                        type: "neutral",
+                        title: { en: "Rust Belt Anger", pt: "Fúria Industrial" },
+                        text: {
+                            en: "Inflation stays low and housing booms, boosting Lula's national numbers. But the industrial heartland is furious. Strikes paralyze Minas Gerais. The opposition weaponizes the 'deindustrialization' narrative effectively.",
+                            pt: "A inflação fica baixa e a habitação cresce, impulsionando os números nacionais de Lula. Mas o coração industrial está furioso. Greves paralisam Minas Gerais. A oposição instrumentaliza a narrativa da 'desindustrialização' efetivamente."
+                        },
+                        expert: {
+                            en: "The report notes that 'imported disinflation' is 'politically advantageous for President Lula’s reelection campaign' globally, but localized pain in manufacturing creates sharp political vulnerabilities.",
+                            pt: "O relatório observa que a 'desinflação importada' é 'politicamente vantajosa para a campanha de reeleição do Presidente Lula' globalmente, mas a dor localizada na manufatura cria vulnerabilidades políticas agudas."
+                        }
+                    },
+                    steel_subsidies: {
+                        type: "positive",
+                        title: { en: "Smart Transition", pt: "Transição Inteligente" },
+                        text: {
+                            en: "It's an expensive solution, but it works politically. Tariffs remain low (pleasing China and consumers), while the government is seen as 'investing in the future' of industry. Tensions cool.",
+                            pt: "É uma solução cara, mas funciona politicamente. Tarifas permanecem baixas (agradando China e consumidores), enquanto o governo é visto como 'investindo no futuro' da indústria. As tensões esfriam."
+                        },
+                        expert: {
+                            en: "The report highlights the challenge of 'balancing the benefits of low inflation against the need for structural diversification.' Targeted industrial policy allows Brazil to ride the deflation wave without abandoning its productive base.",
+                            pt: "O relatório destaca o desafio de 'equilibrar os benefícios da inflação baixa contra a necessidade de diversificação estrutural.' Política industrial direcionada permite ao Brasil surfar a onda da deflação sem abandonar sua base produtiva."
+                        }
+                    },
                     pivot_us: {
                         type: "negative",
                         title: { en: "Beijing Retaliates", pt: "Pequim Retalia" },
@@ -1645,9 +1841,99 @@
                                 optimal: false
                             }
                         ]
+                    },
+                    {
+                        title: { en: "The Secure Zone", pt: "A Zona de Segurança" },
+                        situation: {
+                            en: "${previousOutcome} The border situation remains volatile. Citing 'humanitarian logistics,' the US Southern Command requests permission to establish a 'temporary forward operating site' in Roraima to distribute aid and monitor the crisis. It would mean US military boots on the ground in the Amazon. The opposition supports it as 'necessary aid'; the military establishment is wary of sovereignty violations.",
+                            pt: "${previousOutcome} A situação na fronteira permanece volátil. Citando 'logística humanitária,' o Comando Sul dos EUA solicita permissão para estabelecer um 'local de operação avançada temporário' em Roraima para distribuir ajuda e monitorar a crise. Isso significaria militares dos EUA em solo na Amazônia. A oposição apoia como 'ajuda necessária'; o estabelecimento militar desconfia de violações de soberania."
+                        },
+                        choices: [
+                            {
+                                label: { en: "Grant Permission", pt: "Conceder Permissão" },
+                                icon: "🪖",
+                                shortText: {
+                                    en: "Allow US base. Maximize aid efficiency. Strengthen US alliance.",
+                                    pt: "Permitir base dos EUA. Maximizar eficiência. Fortalecer aliança EUA."
+                                },
+                                text: {
+                                    en: "Recommend granting permission for the US logistics hub. Prioritize the efficiency of aid distribution and strengthening the alliance with Washington over abstract sovereignty concerns.",
+                                    pt: "Recomendar conceder permissão para o hub logístico dos EUA. Priorizar a eficiência da distribuição de ajuda e o fortalecimento da aliança com Washington sobre preocupações abstratas de soberania."
+                                },
+                                consequence: "approve_base",
+                                points: 4,
+                                optimal: false
+                            },
+                            {
+                                label: { en: "Absolute Refusal", pt: "Recusa Absoluta" },
+                                icon: "🚫",
+                                shortText: {
+                                    en: "No foreign troops. Defend sovereignty at all costs. Risk aid blockage.",
+                                    pt: "Sem tropas estrangeiras. Defender soberania a todo custo. Risco de bloqueio."
+                                },
+                                text: {
+                                    en: "Recommend absolute refusal. No foreign military bases in the Amazon, ever. Risk losing US logistical support, but preserve territorial integrity.",
+                                    pt: "Recomendar recusa absoluta. Sem bases militares estrangeiras na Amazônia, jamais. Arriscar perder o apoio logístico dos EUA, mas preservar a integridade territorial."
+                                },
+                                consequence: "reject_base",
+                                points: 6,
+                                optimal: false
+                            },
+                            {
+                                label: { en: "Joint Command", pt: "Comando Conjunto" },
+                                icon: "🇧🇷",
+                                shortText: {
+                                    en: "Brazilian command. US equipment/funding only. No US troops.",
+                                    pt: "Comando brasileiro. Equipamento/fundos EUA. Sem tropas dos EUA."
+                                },
+                                text: {
+                                    en: "Recommend a counter-proposal: A Brazilian-commanded humanitarian operation using US funding and equipment, but with NO deployed US troops. Brazil provides the personnel; US provides the goods.",
+                                    pt: "Recomendar uma contraproposta: Uma operação humanitária sob comando brasileiro usando financiamento e equipamento dos EUA, mas SEM tropas americanas mobilizadas. O Brasil fornece o pessoal; os EUA fornecem os bens."
+                                },
+                                consequence: "joint_command",
+                                points: 10,
+                                optimal: true
+                            }
+                        ]
                     }
                 ],
                 consequences: {
+                    approve_base: {
+                        type: "negative",
+                        title: { en: "Sovereignty Compromised", pt: "Soberania Comprometida" },
+                        text: {
+                            en: "The aid flows, but the political cost is immense. Images of US soldiers in the Amazon trigger a nationalist backlash. The military high command is furious with the government. You've solved a logistics problem but created a political crisis.",
+                            pt: "A ajuda flui, mas o custo político é imenso. Imagens de soldados dos EUA na Amazônia desencadeiam uma reação nacionalista. O alto comando militar está furioso com o governo. Você resolveu um problema logístico mas criou uma crise política."
+                        },
+                        expert: {
+                            en: "The report notes that the 'Donroe Doctrine' involves US reassertion of primacy. Accepting a US military footprint validates this doctrine and weakens Brazil's claim to regional leadership.",
+                            pt: "O relatório observa que a 'Doutrina Donroe' envolve a reafirmação da primazia dos EUA. Aceitar uma pegada militar dos EUA valida essa doutrina e enfraquece a reivindicação do Brasil de liderança regional."
+                        }
+                    },
+                    reject_base: {
+                        type: "neutral",
+                        title: { en: "Aid Bottleneck", pt: "Gargalo de Ajuda" },
+                        text: {
+                            en: "You defend sovereignty, but the crisis overwhelms your capacity. Without US logistics, aid piles up while refugees suffer. The US publicly blames Brazil for the humanitarian failure.",
+                            pt: "Você defende a soberania, mas a crise sobrecarrega sua capacidade. Sem a logística dos EUA, a ajuda se acumula enquanto refugiados sofrem. Os EUA culpam publicamente o Brasil pelo fracasso humanitário."
+                        },
+                        expert: {
+                            en: "The report warns that 'US military incursion' in the region will strain ties. An absolute refusal without offering alternatives creates a vacuum that invites unilateral US action elsewhere.",
+                            pt: "O relatório alerta que 'incursão militar dos EUA' na região tensionará laços. Uma recusa absoluta sem oferecer alternativas cria um vácuo que convida ação unilateral dos EUA em outros lugares."
+                        }
+                    },
+                    joint_command: {
+                        type: "positive",
+                        title: { en: "Model Partnership", pt: "Parceria Modelo" },
+                        text: {
+                            en: "Washington agrees. They get credit for the aid; Brazil keeps control of the territory. The operation becomes a showcase of 'equal partnership.' You've leveraged US resources to strengthen Brazilian capacity.",
+                            pt: "Washington concorda. Eles levam crédito pela ajuda; o Brasil mantém controle do território. A operação se torna uma vitrine de 'parceria igualitária.' Você alavancou recursos dos EUA para fortalecer a capacidade brasileira."
+                        },
+                        expert: {
+                            en: "The report highlights Brazil's potential for 'strategic leverage.' Dictating the terms of engagement—using US resources under Brazilian rules—is the ultimate exercise of that leverage.",
+                            pt: "O relatório destaca o potencial do Brasil para 'alavancagem estratégica.' Ditar os termos de engajamento—usando recursos dos EUA sob regras brasileiras—é o exercício final dessa alavancagem."
+                        }
+                    },
                     full_support: {
                         type: "neutral",
                         title: { en: "Caught in the Middle", pt: "Pego no Meio" },
@@ -1839,9 +2125,99 @@
                                 optimal: false
                             }
                         ]
+                    },
+                    {
+                        title: { en: "The Algorithmic Bias", pt: "O Viés Algorítmico" },
+                        situation: {
+                            en: "${previousOutcome} It's two weeks before the election. Reports surface that the most popular AI search tool is consistently providing negative summaries of the government's economic record while praising the opposition's proposals. The company claims it's just 'summarizing available web data,' but your base calls it a 'digital coup.' The TSE is under immense pressure to act.",
+                            pt: "${previousOutcome} Faltam duas semanas para a eleição. Relatórios surgem de que a ferramenta de busca por IA mais popular está consistentemente fornecendo resumos negativos do histórico econômico do governo enquanto elogia as propostas da oposição. A empresa alega que está apenas 'resumindo dados web disponíveis,' mas sua base chama isso de 'golpe digital.' O TSE está sob imensa pressão para agir."
+                        },
+                        choices: [
+                            {
+                                label: { en: "Suspend the Service", pt: "Suspender o Serviço" },
+                                icon: "🚫",
+                                shortText: {
+                                    en: "Order a temporary ban. Stop the bleeding immediately. Risk backlash.",
+                                    pt: "Ordenar banimento temporário. Estancar o sangramento. Risco de reação."
+                                },
+                                text: {
+                                    en: "Recommend asking the TSE to suspend the service immediately until the election is over. The integrity of the vote is at stake. Stop the algorithmic influence now.",
+                                    pt: "Recomendar pedir ao TSE para suspender o serviço imediatamente até o fim da eleição. A integridade do voto está em jogo. Parar a influência algorítmica agora."
+                                },
+                                consequence: "suspend_service",
+                                points: 4,
+                                optimal: false
+                            },
+                            {
+                                label: { en: "Ignore It", pt: "Ignorar" },
+                                icon: "🙈",
+                                shortText: {
+                                    en: "Do nothing. Focus on street campaigning. Avoid the 'censor' label.",
+                                    pt: "Não fazer nada. Focar na campanha de rua. Evitar rótulo de 'censor'."
+                                },
+                                text: {
+                                    en: "Recommend ignoring the AI bias. Any action will be framed as censorship and mobilize the opposition. Trust that voters care more about their wallets than chatbots.",
+                                    pt: "Recomendar ignorar o viés da IA. Qualquer ação será enquadrada como censura e mobilizará a oposição. Confiar que os eleitores se importam mais com seus bolsos do que com chatbots."
+                                },
+                                consequence: "ignore_bias",
+                                points: 5,
+                                optimal: false
+                            },
+                            {
+                                label: { en: "Transparency Mandate", pt: "Mandato de Transparência" },
+                                icon: "🔍",
+                                shortText: {
+                                    en: "Demand algorithmic explanation. Fine for non-compliance. Expose the bias.",
+                                    pt: "Exigir explicação algorítmica. Multar por descumprimento. Expor o viés."
+                                },
+                                text: {
+                                    en: "Recommend an emergency TSE resolution demanding the company explain its 'summarization logic' within 24 hours or face massive daily fines. Don't block it; force them to tweak it or admit fault publicly.",
+                                    pt: "Recomendar uma resolução de emergência do TSE exigindo que a empresa explique sua 'lógica de resumo' em 24 horas ou enfrente multas diárias massivas. Não bloqueie; force-os a ajustar ou admitir falha publicamente."
+                                },
+                                consequence: "transparency_mandate",
+                                points: 10,
+                                optimal: true
+                            }
+                        ]
                     }
                 ],
                 consequences: {
+                    suspend_service: {
+                        type: "negative",
+                        title: { en: "Martyrdom Narrative", pt: "Narrativa de Mártir" },
+                        text: {
+                            en: "The ban backfires. The opposition uses VPNs to access the tool and shares screenshots everywhere, screaming 'Censorship!' The tech company sues. You've made the AI tool the main character of the election.",
+                            pt: "O banimento sai pela culatra. A oposição usa VPNs para acessar a ferramenta e compartilha prints em todos os lugares, gritando 'Censura!' A empresa de tecnologia processa. Você tornou a ferramenta de IA o personagem principal da eleição."
+                        },
+                        expert: {
+                            en: "The report warns that 'enforceability difficulties' plague AI regulation. Bans often fail technically while succeeding politically for the opposition.",
+                            pt: "O relatório alerta que 'dificuldades de aplicação' atormentam a regulação de IA. Banimentos frequentemente falham tecnicamente enquanto têm sucesso politicamente para a oposição."
+                        }
+                    },
+                    ignore_bias: {
+                        type: "neutral",
+                        title: { en: "Slow Bleed", pt: "Sangramento Lento" },
+                        text: {
+                            en: "You avoid the censorship trap, but the negative narrative sets in. Undecided voters, looking for 'neutral' info, are swayed by the AI. You lose the digital ground war.",
+                            pt: "Você evita a armadilha da censura, mas a narrativa negativa se instala. Eleitores indecisos, procurando informações 'neutras', são influenciados pela IA. Você perde a guerra digital terrestre."
+                        },
+                        expert: {
+                            en: "The report notes that 'voters increasingly query AI systems for candidate information,' creating influence channels that cannot be ignored.",
+                            pt: "O relatório observa que 'eleitores buscam cada vez mais informações sobre candidatos em sistemas de IA', criando canais de influência que não podem ser ignorados."
+                        }
+                    },
+                    transparency_mandate: {
+                        type: "positive",
+                        title: { en: "Accountability", pt: "Responsabilidade" },
+                        text: {
+                            en: "The company, fearing fines and bad PR, tweaks its model to be more neutral. You frame the government as the defender of 'fair information' against 'big tech manipulation.' You win the narrative war.",
+                            pt: "A empresa, temendo multas e má publicidade, ajusta seu modelo para ser mais neutro. Você enquadra o governo como defensor da 'informação justa' contra a 'manipulação das big tech.' Você vence a guerra narrativa."
+                        },
+                        expert: {
+                            en: "The report suggests that smart regulation focuses on 'regulatory frameworks' and enforcement that exposes algorithmic influence rather than trying to ban it.",
+                            pt: "O relatório sugere que regulação inteligente foca em 'marcos regulatórios' e aplicação que expõe a influência algorítmica em vez de tentar bani-la."
+                        }
+                    },
                     aggressive_takedown: {
                         type: "neutral",
                         title: { en: "Streisand Effect", pt: "Efeito Streisand" },
@@ -2033,9 +2409,99 @@
                                 optimal: false
                             }
                         ]
+                    },
+                    {
+                        title: { en: "The Biofuel Barrier", pt: "A Barreira dos Biocombustíveis" },
+                        situation: {
+                            en: "${previousOutcome} Bad news from Washington. The US has revised its tax credits for Sustainable Aviation Fuel (SAF), effectively excluding Brazilian ethanol-based SAF to protect American corn farmers. This blocks a multi-billion dollar export market. At the same time, China is asking for a long-term supply deal for its own growing aviation sector, but at lower prices.",
+                            pt: "${previousOutcome} Más notícias de Washington. Os EUA revisaram seus créditos fiscais para Combustível de Aviação Sustentável (SAF), efetivamente excluindo o SAF à base de etanol brasileiro para proteger os produtores de milho americanos. Isso bloqueia um mercado de exportação multibilionário. Ao mesmo tempo, a China pede um acordo de fornecimento de longo prazo para seu próprio setor de aviação em crescimento, mas a preços mais baixos."
+                        },
+                        choices: [
+                            {
+                                label: { en: "Retaliatory Tariffs", pt: "Tarifas Retaliatórias" },
+                                icon: "🌽",
+                                shortText: {
+                                    en: "Tax US corn/diesel. Fight fire with fire. Demand fair access.",
+                                    pt: "Taxar milho/diesel dos EUA. Fogo contra fogo. Exigir acesso justo."
+                                },
+                                text: {
+                                    en: "Recommend hitting back immediately. Impose tariffs on US diesel and corn imports. Threaten to drag the US to the WTO. Show that protectionism has a cost.",
+                                    pt: "Recomendar revidar imediatamente. Impor tarifas sobre importações de diesel e milho dos EUA. Ameaçar levar os EUA à OMC. Mostrar que o protecionismo tem um custo."
+                                },
+                                consequence: "retaliate_corn",
+                                points: 4,
+                                optimal: false
+                            },
+                            {
+                                label: { en: "Pivot to Asia", pt: "Virar para a Ásia" },
+                                icon: "🌏",
+                                shortText: {
+                                    en: "Sign the China deal. Partner with India on biofuels. Forget the US market.",
+                                    pt: "Assinar acordo com China. Parceria com Índia. Esquecer mercado dos EUA."
+                                },
+                                text: {
+                                    en: "Recommend accepting the Chinese deal and launching a 'Global Biofuel Alliance' with India. If the US wants to close its market, we will build the market of the Global South. Volume over margin.",
+                                    pt: "Recomendar aceitar o acordo chinês e lançar uma 'Aliança Global de Biocombustíveis' com a Índia. Se os EUA querem fechar seu mercado, construiremos o mercado do Sul Global. Volume sobre margem."
+                                },
+                                consequence: "pivot_south",
+                                points: 10,
+                                optimal: true
+                            },
+                            {
+                                label: { en: "Lobby & Wait", pt: "Lobby e Esperar" },
+                                icon: "⏳",
+                                shortText: {
+                                    en: "Negotiate exceptions. Use diplomatic channels. Don't burn bridges.",
+                                    pt: "Negociar exceções. Canais diplomáticos. Não queimar pontes."
+                                },
+                                text: {
+                                    en: "Recommend a patient diplomatic offensive. Hire lobbyists in DC. Try to prove our SAF meets their carbon standards. Hope for a policy reversal after the midterms.",
+                                    pt: "Recomendar uma ofensiva diplomática paciente. Contratar lobistas em DC. Tentar provar que nosso SAF atende aos padrões de carbono deles. Esperar por uma reversão de política após as eleições de meio de mandato."
+                                },
+                                consequence: "lobby_wait",
+                                points: 5,
+                                optimal: false
+                            }
+                        ]
                     }
                 ],
                 consequences: {
+                    retaliate_corn: {
+                        type: "negative",
+                        title: { en: "Trade War Escalation", pt: "Escalada da Guerra Comercial" },
+                        text: {
+                            en: "Washington retaliates against your retaliation. The dispute expands to steel and aluminum. You lose the SAF market AND face new barriers elsewhere. The WTO is too slow to help.",
+                            pt: "Washington retalia contra sua retaliação. A disputa se expande para aço e alumínio. Você perde o mercado de SAF E enfrenta novas barreiras em outros lugares. A OMC é lenta demais para ajudar."
+                        },
+                        expert: {
+                            en: "The report warns that 'reduced access to the American market could constrain the development' of nascent industries. Picking a fight with a protectionist US usually yields pain.",
+                            pt: "O relatório alerta que 'acesso reduzido ao mercado americano poderia restringir o desenvolvimento' de indústrias nascentes. Comprar briga com um EUA protecionista geralmente resulta em dor."
+                        }
+                    },
+                    pivot_south: {
+                        type: "positive",
+                        title: { en: "Global South Leader", pt: "Líder do Sul Global" },
+                        text: {
+                            en: "The strategy pays off. China and India consume all the SAF Brazil can produce. You establish a new global standard for biofuels independent of Washington. Brazil becomes the energy guarantor of the developing world.",
+                            pt: "A estratégia compensa. China e Índia consomem todo o SAF que o Brasil pode produzir. Você estabelece um novo padrão global para biocombustíveis independente de Washington. O Brasil se torna o garantidor energético do mundo em desenvolvimento."
+                        },
+                        expert: {
+                            en: "The report notes that Brazil 'may become a refuge for low-carbon production facing US barriers.' Diversifying to Asian markets capitalizes on this role.",
+                            pt: "O relatório observa que o Brasil 'pode se tornar um refúgio para produção de baixo carbono enfrentando barreiras dos EUA.' Diversificar para mercados asiáticos capitaliza esse papel."
+                        }
+                    },
+                    lobby_wait: {
+                        type: "neutral",
+                        title: { en: "Opportunity Cost", pt: "Custo de Oportunidade" },
+                        text: {
+                            en: "You wait, but the rules don't change. Meanwhile, other producers capture the Asian market. Brazil is left with inventory it can't sell and a 'special relationship' that yields nothing.",
+                            pt: "Você espera, mas as regras não mudam. Enquanto isso, outros produtores capturam o mercado asiático. O Brasil fica com estoque que não pode vender e uma 'relação especial' que não rende nada."
+                        },
+                        expert: {
+                            en: "The report indicates US protectionism is structural. Hoping for policy reversals is risky when 'US challenges to international transport regimes' are increasing.",
+                            pt: "O relatório indica que o protecionismo dos EUA é estrutural. Esperar por reversões políticas é arriscado quando 'desafios dos EUA aos regimes internacionais de transporte' estão aumentando."
+                        }
+                    },
                     protective_tariffs: {
                         type: "negative",
                         title: { en: "Green Transition Stalls", pt: "Transição Verde Estanca" },
@@ -2129,13 +2595,25 @@
             document.title = lang === 'pt'
                 ? 'Sala de Crise 2026 - Simulador Geopolítico Brasil'
                 : 'Crisis Room 2026 - Brazil Geopolitical Simulator';
-            // Update role display if in a scenario
+            
+            // Re-render current screen to update dynamic content
             if (currentScenario) {
                 document.getElementById('role-display').textContent = t(currentScenario.role);
-            }
-            // Re-render current screen if in game
-            if (currentScenario && document.getElementById('game-screen').classList.contains('active')) {
-                renderStep();
+                const activeScreen = document.querySelector('.screen.active').id;
+
+                if (activeScreen === 'game-screen') {
+                    if (lastConsequenceKey) {
+                        const lastConsequence = currentScenario.consequences[lastConsequenceKey];
+                        const lastConsequenceText = t(lastConsequence.text);
+                        window.lastOutcomeText = lastConsequenceText.split('.')[0] + '.';
+                    }
+                    renderStep();
+                } else if (activeScreen === 'consequence-screen' && lastConsequenceKey) {
+                    const consequence = currentScenario.consequences[lastConsequenceKey];
+                    renderConsequenceScreen(consequence);
+                } else if (activeScreen === 'results-screen') {
+                    showResults();
+                }
             }
         }
 
@@ -2234,6 +2712,7 @@
             const step = currentScenario.steps[currentStep];
             const choice = step.choices[choiceIndex];
             const consequence = currentScenario.consequences[choice.consequence];
+            lastConsequenceKey = choice.consequence;
 
             score += choice.points;
             totalDecisions++;
@@ -2242,22 +2721,9 @@
             const consequenceText = t(consequence.text);
             window.lastOutcomeText = consequenceText.split('.')[0] + '.';
 
-            document.getElementById('consequence-badge').textContent = t(currentScenario.badge);
-            document.getElementById('consequence-title').textContent = t(consequence.title);
-
-            // Add consequence icon based on type
-            const consequenceIcon = {
-                positive: '✅',
-                negative: '⚠️',
-                neutral: '⚖️'
-            }[consequence.type] || '📋';
-
-            document.getElementById('consequence-text').innerHTML =
-                `<span class="consequence-icon">${consequenceIcon}</span>${consequenceText}`;
-            document.getElementById('expert-insight').textContent = t(consequence.expert);
+            renderConsequenceScreen(consequence);
 
             const box = document.getElementById('consequence-box');
-            box.className = 'consequence-box ' + consequence.type;
             // Play consequence sound
             playConsequenceSound(consequence.type);
             // Re-trigger animation
@@ -2265,12 +2731,29 @@
             box.offsetHeight; // Trigger reflow
             box.style.animation = null;
 
+            showScreen('consequence-screen');
+        }
+
+        function renderConsequenceScreen(consequence) {
+            document.getElementById('consequence-badge').textContent = t(currentScenario.badge);
+            document.getElementById('consequence-title').textContent = t(consequence.title);
+
+            const consequenceIcon = {
+                positive: '✅',
+                negative: '⚠️',
+                neutral: '⚖️'
+            }[consequence.type] || '📋';
+            const consequenceText = t(consequence.text);
+            document.getElementById('consequence-text').innerHTML =
+                `<span class="consequence-icon">${consequenceIcon}</span>${consequenceText}`;
+            document.getElementById('expert-insight').textContent = t(consequence.expert);
+
+            document.getElementById('consequence-box').className = 'consequence-box ' + consequence.type;
+
             const continueBtn = document.getElementById('continue-btn');
             continueBtn.textContent = currentStep < currentScenario.steps.length - 1
-                ? (currentLang === 'pt' ? 'Continuar' : 'Continue')
-                : (currentLang === 'pt' ? 'Ver Resultados' : 'See Results');
-
-            showScreen('consequence-screen');
+                ? t({ en: 'Continue', pt: 'Continuar' })
+                : t({ en: 'See Results', pt: 'Ver Resultados' });
         }
 
         // Continue to next step or results
@@ -2319,8 +2802,14 @@
 
         // Screen management
         function showScreen(screenId) {
+            if (typewriterTimeout) clearTimeout(typewriterTimeout);
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
+
+            const header = document.getElementById('main-header');
+            if (header) {
+                header.style.display = screenId === 'start-screen' ? 'block' : 'none';
+            }
         }
     </script>
 </body>
