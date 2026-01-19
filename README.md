@@ -20,11 +20,7 @@ Open `game_brasil.html` in any modern web browser - no server required.
 2. **O Dilema da China / The China Dilemma** - Balance Brazil's largest trading partner against US pressure
 3. **Venezuela ao Lado / Venezuela Next Door** - Respond to regional crisis on Brazil's border
 
-## Files
-
-- `game_brasil.html` - Main game (Brazil-focused, bilingual)
-- `game.html` - Original English version (US perspective)
-- `software_ideas.md` - Other software ideas based on the report
+...And more!
 
 ## Based On
 
