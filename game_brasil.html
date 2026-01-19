@@ -838,7 +838,7 @@
                         <span id="role-display">Assessor Especial</span>
                     </div>
                     <button class="btn-secondary" onclick="backToMenu()" style="padding: 8px 20px; font-size: 0.9em;"
-                        data-en="← Back to Menu" data-pt="← Voltar ao Menu">← Voltar ao Menu</button>
+                        data-en="← Back Home" data-pt="← Voltar ao Início">← Voltar ao Início</button>
                 </div>
 
                 <div class="card">
@@ -1001,7 +1001,7 @@
             const osc1 = audioContext.createOscillator();
             osc1.type = 'sawtooth';
             osc1.frequency.setValueAtTime(baseFreq, audioContext.currentTime);
-            
+
             const osc2 = audioContext.createOscillator();
             osc2.type = 'sawtooth';
             osc2.frequency.setValueAtTime(baseFreq - 0.5, audioContext.currentTime); // Slightly detuned
@@ -1023,10 +1023,10 @@
 
         function stopAmbientMusic() {
             if (!musicStarted || !ambientGain) return;
-            
+
             ambientGain.gain.cancelScheduledValues(audioContext.currentTime);
             ambientGain.gain.linearRampToValueAtTime(0, audioContext.currentTime + 1); // Fade out
-            
+
             setTimeout(() => {
                 ambientOscillators.forEach(osc => osc.stop());
                 ambientOscillators = [];
@@ -2595,20 +2595,20 @@
             document.title = lang === 'pt'
                 ? 'Sala de Crise 2026 - Simulador Geopolítico Brasil'
                 : 'Crisis Room 2026 - Brazil Geopolitical Simulator';
-            
+
             // Re-render current screen to update dynamic content
             if (currentScenario) {
                 document.getElementById('role-display').textContent = t(currentScenario.role);
                 const activeScreen = document.querySelector('.screen.active').id;
 
                 if (activeScreen === 'game-screen') {
-                    if (lastConsequenceKey) {
+                    if (lastConsequenceKey && currentScenario.consequences[lastConsequenceKey]) {
                         const lastConsequence = currentScenario.consequences[lastConsequenceKey];
                         const lastConsequenceText = t(lastConsequence.text);
                         window.lastOutcomeText = lastConsequenceText.split('.')[0] + '.';
                     }
                     renderStep();
-                } else if (activeScreen === 'consequence-screen' && lastConsequenceKey) {
+                } else if (activeScreen === 'consequence-screen' && lastConsequenceKey && currentScenario.consequences[lastConsequenceKey]) {
                     const consequence = currentScenario.consequences[lastConsequenceKey];
                     renderConsequenceScreen(consequence);
                 } else if (activeScreen === 'results-screen') {
@@ -2657,6 +2657,8 @@
             score = 0;
             optimalChoices = 0;
             totalDecisions = 0;
+            lastConsequenceKey = null; // Reset for new game
+            window.lastOutcomeText = ''; // Reset outcome text
 
             document.getElementById('role-display').textContent = t(currentScenario.role);
             showScreen('game-screen');
@@ -2805,6 +2807,9 @@
             if (typewriterTimeout) clearTimeout(typewriterTimeout);
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(screenId).classList.add('active');
+
+            // Scroll to top on screen change
+            window.scrollTo(0, 0);
 
             const header = document.getElementById('main-header');
             if (header) {
