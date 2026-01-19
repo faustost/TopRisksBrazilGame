@@ -3288,6 +3288,9 @@
 
         // Page navigation
         function showPage(page) {
+            // Stop typewriter effect
+            if (typewriterTimeout) clearTimeout(typewriterTimeout);
+
             // Update navigation links
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.classList.remove('active');
